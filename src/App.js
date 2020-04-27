@@ -1,26 +1,29 @@
+import store from './Store';
 import React from 'react';
-import logo from './logo.svg';
+import TaskBar from './components/TaskBar';
+import Splash from './pages/Splash';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    store: {}
+  };
+
+  constructor(props){
+    super(props);
+    store.subscribe(() => {
+      this.setState({store: store.getState()})
+    });
+  }
+
+  render(){
+    return (
+      <>
+        <TaskBar user={this.state.store.user}/>
+        <Splash/>
+      </>
+    );
+  }
 }
 
 export default App;
