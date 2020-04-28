@@ -1,6 +1,7 @@
 import React from 'react';
 import store from '../Store';
 import { loginUser } from '../Actions';
+import { Link } from 'react-router-dom';
 
 export default class Splash extends React.Component {
     state = {
@@ -90,7 +91,7 @@ export default class Splash extends React.Component {
                                             {this.state.busy?" Wait":"Login"}
                                         </button>
                                     </fieldset>
-                                    <p>Trouble logging in? <a href="#">Help</a></p>
+                                    <p>Trouble logging in? <Link to="/recovery">Help</Link></p>
                                 </form>
                             </div>
                             <div className="l-box-lrg pure-u-1 pure-u-md-3-5">
