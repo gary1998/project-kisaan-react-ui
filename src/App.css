@@ -77,7 +77,7 @@ a {
  * I want my pure-button elements to look a little different
  */
 .pure-button {
-    background-color: #1f8dd6;
+    background-color: #a44a04;
     color: white;
     padding: 0.5em 2em;
     border-radius: 5px;
@@ -85,7 +85,7 @@ a {
 
 a.pure-button-primary {
     background: white;
-    color: #1f8dd6;
+    color: #a44a04;
     border-radius: 5px;
     font-size: 120%;
 }
@@ -102,7 +102,7 @@ a.pure-button-primary {
     box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
 }
 .home-menu {
-    background: #2d3e50;
+    background: #a44a04;
 }
 .pure-menu.pure-menu-fixed {
     /* Fixed menus normally have a border at the bottom. */
@@ -122,13 +122,13 @@ a.pure-button-primary {
 }
 
 .home-menu a {
-    color: #6FBEF3;
+    color: #f7ebd6;
 }
 .home-menu li a:hover,
 .home-menu li a:focus {
     background: none;
     border: none;
-    color: #AECFE5;
+    color: #f4cf91;
 }
 
 .pure-menu-selected > .pure-menu-link, .pure-menu-selected > .pure-menu-link:visited {
@@ -141,7 +141,7 @@ a.pure-button-primary {
  */
 
  .splash-container {
-    background: #1f8dd6;
+    background-image: url('https://i.pinimg.com/originals/e7/e1/a9/e7e1a91888e01c4a402ba3af0374aae2.jpg');
     z-index: 1;
     overflow: hidden;
     /* The following styles are required for the "scroll-over" effect */
@@ -165,7 +165,6 @@ a.pure-button-primary {
 
 /* This is the main heading that appears on the blue section */
 .splash-head {
-    background-color: white;
     font-size: 20px;
     font-weight: bold;
     color: white;
@@ -174,12 +173,13 @@ a.pure-button-primary {
     font-weight: 100;
     border-radius: 5px;
     line-height: 1em;
-    box-shadow: 3px 3px #60b6f0;
+    box-shadow: 3px 3px #a44a04;
 }
 
 /* This is the subheading that appears on the blue section */
 .splash-subhead {
-    color: white;
+    font-weight: bold;
+    color: #a44a04;
     letter-spacing: 0.05em;
     opacity: 0.8;
 }
@@ -219,7 +219,7 @@ a.pure-button-primary {
 
 /* This is the class used for the content sub-headers (<h3>) */
 .content-subhead {
-    color: #1f8dd6;
+    color: #a44a04;
 }
 .content-subhead i {
     margin-right: 7px;
@@ -233,7 +233,8 @@ a.pure-button-primary {
 
 /* This is the class used for the footer */
 .footer {
-    background: #111;
+    color: #a44a04;
+    background: #f4cf91;
     position: fixed;
     bottom: 0;
     width: 100%;

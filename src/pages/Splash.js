@@ -6,7 +6,7 @@ export default class Splash extends React.Component {
             <>
                 <div className="splash-container">
                     <div className="splash">
-                        <h1 className="splash-head"><img alt="Splash" src="./splash.png" height="120" width="120"/></h1>
+                        <h1 className="splash-head"><img alt="Splash" src="img/logo-128.png" height="120" width="120"/></h1>
                         <p className="splash-subhead">
                             Project Kisaan - As the name suggests, it's all about Kissan.
                         </p>
