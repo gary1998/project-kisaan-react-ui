@@ -3,8 +3,9 @@ import {
   Link,
   HashRouter
 } from "react-router-dom";
+import { connect } from 'react-redux';
 
-export default class AppBar extends React.Component {
+class TaskBar extends React.Component {
   render(){
     return(
       <div className="header">
@@ -13,7 +14,7 @@ export default class AppBar extends React.Component {
             <ul className="pure-menu-list">
               <HashRouter>
                 <li className="pure-menu-item pure-menu-selected"><Link to="/" className="pure-menu-link">Home</Link></li>
-                {this.props.store.user?<><li className="pure-menu-item"><Link to="/dashboard" className="pure-menu-link">Dashboard</Link></li><li className="pure-menu-item"><Link to="/chat" className="pure-menu-link">Chat</Link></li></>:""}
+                {this.props.user?<><li className="pure-menu-item"><Link to="/dashboard" className="pure-menu-link">Dashboard</Link></li><li className="pure-menu-item"><Link to="/chat" className="pure-menu-link">Chat</Link></li></>:""}
                 <li className="pure-menu-item"><Link to="/faq" className="pure-menu-link">Assistance/FAQs</Link></li>
               </HashRouter>
             </ul>
@@ -22,3 +23,11 @@ export default class AppBar extends React.Component {
     )
   }
 }
+
+function mapStateToProps(state){
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps)(TaskBar);

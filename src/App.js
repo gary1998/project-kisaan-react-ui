@@ -8,25 +8,15 @@ import FAQ from './pages/FAQ';
 import Recovery from './pages/Recovery';
 import './App.css';
 import { Route, HashRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class App extends React.Component {
-  state = {
-    store: {}
-  };
-
-  constructor(props){
-    super(props);
-    store.subscribe(() => {
-      this.setState({store: store.getState()})
-    });
-  }
-
   render(){
     return (
       <>
-        <TaskBar store={this.state.store}/>
+        <TaskBar />
         <HashRouter>
-          <Route exact path="/" render={() => <Splash store={this.state.store}/>}></Route>
+          <Route exact path="/" render={() => <Splash />}></Route>
           <Route path="/dashboard" render={() => <Dashboard/>}></Route>
           <Route path="/chat" render={() => <Chat/>}></Route>
           <Route path="/faq" render={() => <FAQ/>}></Route>
@@ -37,4 +27,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function mapStateToProps(state){
+  return{
+    user: state.user
+  };
+}
+
+export default connect(mapStateToProps)(App);

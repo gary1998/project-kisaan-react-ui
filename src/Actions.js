@@ -14,6 +14,7 @@ export const loginUser = async(email, password) => {
         }).then(data => {
             return data.json();
         }).then(body => {
+            console.log(body);
             if(body.data.login){
                 user({
                     type: "LOGIN_SUCCESS",

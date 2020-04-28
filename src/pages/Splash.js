@@ -2,12 +2,13 @@ import React from 'react';
 import store from '../Store';
 import { loginUser } from '../Actions';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class Splash extends React.Component {
+class Splash extends React.Component {
     state = {
         email: "",
         password: "",
-        busy: false
+        busy: false,
     }
     componentWillReceiveProps(){
         this.setState({busy: false, email: "", password: ""});
@@ -108,10 +109,18 @@ export default class Splash extends React.Component {
                         </div>
                     </div>
                     <div className="footer l-box is-center">
-                        {!this.props.store.user?<>You're not logged in.</>:<>Welcome {this.props.store.user.name} ({this.props.store.user.email}). Click here to <a href="#">logout</a></>}
+                        {!this.props.user?<>You're not logged in.</>:<>Welcome {this.props.user.name} ({this.props.user.email}). Click here to <a href="#">logout</a></>}
                     </div>
                 </div>
             </>
         )   
     }
 }
+
+function mapStateToProps(state){
+    return {
+      user: state.user
+    }
+  }
+  
+  export default connect(mapStateToProps)(Splash);
