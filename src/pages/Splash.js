@@ -35,7 +35,7 @@ export default class Splash extends React.Component {
                 </div>
                 <div className="content-wrapper">
                     <div className="content">
-                        <h2 className="content-head is-center">App Features</h2>
+                        <h2 className="content-head is-center">Features</h2>
                         <div className="pure-g">
                             <div className="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                                 <h3 className="content-subhead">
@@ -107,7 +107,7 @@ export default class Splash extends React.Component {
                         </div>
                     </div>
                     <div className="footer l-box is-center">
-                        You're not logged in.
+                        {!this.props.store.user?<>You're not logged in.</>:<>Welcome {this.props.store.user.name} ({this.props.store.user.email}). Click here to <a href="#">logout</a></>}
                     </div>
                 </div>
             </>
