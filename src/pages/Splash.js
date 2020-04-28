@@ -1,17 +1,35 @@
 import React from 'react';
+import store from '../Store';
+import { loginUser } from '../Actions';
 
 export default class Splash extends React.Component {
+    state = {
+        email: "",
+        password: "",
+        busy: false
+    }
+    componentWillReceiveProps(){
+        this.setState({busy: false, email: "", password: ""});
+    }
+    _handleLoginSubmit = async(evt) => {
+        evt.preventDefault();
+        this.setState({busy: true});
+        store.dispatch(await loginUser(this.state.email, this.state.password));
+    }
+    _handleEmailChange = (evt) => {
+        this.setState({email: evt.target.value});
+    }
+    _handlePasswordChange = (evt) => {
+        this.setState({password: evt.target.value});
+    }
     render(){
         return(
             <>
                 <div className="splash-container">
                     <div className="splash">
-                        <h1 className="splash-head"><img alt="Splash" src="img/logo-128.png" height="120" width="120"/></h1>
+                        <h1 className="splash-head"><img alt="Splash" src="img/logo-128.png"/></h1>
                         <p className="splash-subhead">
                             Project Kisaan - As the name suggests, it's all about Kissan.
-                        </p>
-                        <p>
-                            <a href="http://purecss.io" className="pure-button pure-button-primary">Get Started</a>
                         </p>
                     </div>
                 </div>
@@ -33,7 +51,7 @@ export default class Splash extends React.Component {
                                     <i className="fa fa-users"></i>
                                     User Friendly
                                 </h3>
-                                <p>
+                                <p>(
                                     The AgriBot and Project Kisaan web application requires almost negligible input which makes it very user friendly.
                                 </p>
                             </div>
@@ -61,13 +79,16 @@ export default class Splash extends React.Component {
                         <h2 className="content-head is-center">Login to continue...</h2>
                         <div className="pure-g">
                             <div className="l-box-lrg pure-u-1 pure-u-md-2-5">
-                                <form className="pure-form pure-form-stacked">
+                                <form className="pure-form pure-form-stacked" onSubmit={this._handleLoginSubmit}>
                                     <fieldset>
                                         <label htmlFor="email">Your Email</label>
-                                        <input id="email" type="email" placeholder="mark@example.com" required/>
+                                        <input id="email" type="email" value={this.state.email} onChange={this._handleEmailChange} placeholder="mark@example.com" required/>
                                         <label htmlFor="password">Your Password</label>
-                                        <input id="password" type="password" placeholder="*****" required/>
-                                        <button type="submit" className="pure-button">Login</button>
+                                        <input id="password" type="password" value={this.state.password} onChange={this._handlePasswordChange} placeholder="*****" required/>
+                                        <button type="submit" className="pure-button">
+                                            {this.state.busy?<i className="fa fa-spin fa-spinner" aria-hidden="true"></i>:""}
+                                            {this.state.busy?" Wait":"Login"}
+                                        </button>
                                     </fieldset>
                                     <p>Trouble logging in? <a href="#">Help</a></p>
                                 </form>

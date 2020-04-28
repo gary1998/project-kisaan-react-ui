@@ -19,8 +19,8 @@ class App extends React.Component {
   render(){
     return (
       <>
-        <TaskBar user={this.state.store.user}/>
-        <Splash/>
+        <TaskBar store={this.state.store}/>
+        <Splash store={this.state.store}/>
       </>
     );
   }
