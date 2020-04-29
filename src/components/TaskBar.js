@@ -23,7 +23,7 @@ class TaskBar extends React.Component {
               <ul className="pure-menu-list">
                 <HashRouter>
                   <li className="pure-menu-item pure-menu-selected"><Link to="/" className="pure-menu-link">Home</Link></li>
-                  {this.props.user?<><li className="pure-menu-item"><Link to="/dashboard" className="pure-menu-link">Dashboard</Link></li><li className="pure-menu-item"><Link to="/chat" className="pure-menu-link">Chat</Link></li></>:""}
+                  {this.props.user?<><li className="pure-menu-item"><Link to="/dashboard" className="pure-menu-link">Dashboard</Link></li><li className="pure-menu-item"><Link to="/chat" className="pure-menu-link">Chat</Link></li><li className="pure-menu-item"><Link to="/configure" className="pure-menu-link">Configure</Link></li></>:""}
                   <li className="pure-menu-item"><Link to="/faq" className="pure-menu-link">Assistance/FAQs</Link></li>
                 </HashRouter>
               </ul>

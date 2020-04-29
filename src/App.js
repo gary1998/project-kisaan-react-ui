@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Chat from './pages/Chat';
 import FAQ from './pages/FAQ';
 import Recovery from './pages/Recovery';
+import Configure from './pages/Configure';
 import './App.css';
 import { Route, HashRouter } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ class App extends React.Component {
           <Route path="/chat" render={() => <Chat/>}></Route>
           <Route path="/faq" render={() => <FAQ/>}></Route>
           <Route path="/recovery" render={() => <Recovery/>}></Route>
+          <Route path="/configure" render={() => <Configure />}></Route>
         </HashRouter>
       </>
     );
