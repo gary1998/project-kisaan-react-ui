@@ -4,6 +4,7 @@ export const loadState = () => {
         if(serializedState === null){
             return undefined;
         }
+        console.log("state loaded", serializedState);
         return JSON.parse(serializedState);
     } catch(err){
         return undefined;
@@ -12,8 +13,9 @@ export const loadState = () => {
 
 export const saveState = (state) => {
     try{
-        const unserializedState = JSON.stringify(state);
-        localStorage.setItem('projectkisaanstate', unserializedState);
+        const serializedState = JSON.stringify(state);
+        localStorage.setItem('projectkisaanstate', serializedState);
+        console.log("state saved", serializedState);
     } catch(err){
         console.log(err);
     }

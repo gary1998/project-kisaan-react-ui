@@ -78,22 +78,36 @@ class Splash extends React.Component {
                         </div>
                     </div>
                     <div className="content">
-                        <h2 className="content-head is-center">Login to continue...</h2>
+                        <h2 className="content-head is-center">{!this.props.user?"Login to continue...":"More information..."}</h2>
                         <div className="pure-g">
                             <div className="l-box-lrg pure-u-1 pure-u-md-2-5">
-                                <form className="pure-form pure-form-stacked" onSubmit={this._handleLoginSubmit}>
-                                    <fieldset>
-                                        <label htmlFor="email">Your Email</label>
-                                        <input id="email" type="email" value={this.state.email} onChange={this._handleEmailChange} placeholder="mark@example.com" required/>
-                                        <label htmlFor="password">Your Password</label>
-                                        <input id="password" type="password" value={this.state.password} onChange={this._handlePasswordChange} placeholder="*****" required/>
-                                        <button type="submit" className="pure-button">
-                                            {this.state.busy?<i className="fa fa-spin fa-spinner" aria-hidden="true"></i>:""}
-                                            {this.state.busy?" Wait":"Login"}
-                                        </button>
-                                    </fieldset>
-                                    <p>Trouble logging in? <Link to="/recovery">Help</Link></p>
-                                </form>
+                                {
+                                    !this.props.user?
+                                    <form className="pure-form pure-form-stacked" onSubmit={this._handleLoginSubmit}>
+                                        <fieldset>
+                                            <label htmlFor="email">Your Email</label>
+                                            <input id="email" type="email" value={this.state.email} onChange={this._handleEmailChange} placeholder="mark@example.com" required/>
+                                            <label htmlFor="password">Your Password</label>
+                                            <input id="password" type="password" value={this.state.password} onChange={this._handlePasswordChange} placeholder="*****" required/>
+                                            <button type="submit" className="pure-button">
+                                                {this.state.busy?<i className="fa fa-spin fa-spinner" aria-hidden="true"></i>:""}
+                                                {this.state.busy?" Wait":"Login"}
+                                            </button>
+                                        </fieldset>
+                                        <p>Trouble logging in? <Link to="/recovery">Help</Link></p>
+                                    </form>:
+                                    <form className="pure-form pure-form-stacked">
+                                        <div className="avatar-container">
+                                            <img src={this.props.user.photo} className="avatar" alt="Avatar"></img>
+                                        </div>
+                                        <fieldset>
+                                            <label htmlFor="email">Your Email</label>
+                                            <input id="email" type="email" value={this.props.user.email} readOnly/>
+                                            <label htmlFor="name">Your Name</label>
+                                            <input id="name" type="text" value={this.props.user.name} readOnly/>
+                                        </fieldset>
+                                    </form>
+                                }
                             </div>
                             <div className="l-box-lrg pure-u-1 pure-u-md-3-5">
                                 <h4>Contact Us</h4>
@@ -108,9 +122,6 @@ class Splash extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="footer l-box is-center">
-                        {!this.props.user?<>You're not logged in.</>:<>Welcome {this.props.user.name} ({this.props.user.email}). Click here to <a href="#">logout</a></>}
-                    </div>
                 </div>
             </>
         )   
@@ -121,6 +132,6 @@ function mapStateToProps(state){
     return {
       user: state.user
     }
-  }
-  
-  export default connect(mapStateToProps)(Splash);
+}
+
+export default connect(mapStateToProps)(Splash);

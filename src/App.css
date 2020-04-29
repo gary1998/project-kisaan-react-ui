@@ -238,6 +238,7 @@ a.pure-button-primary {
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 3;
 }
 
 /*
@@ -295,4 +296,19 @@ a.pure-button-primary {
     .splash-head {
         font-size: 300%;
     }
+}
+
+.avatar-container {
+    text-align: center;
+}
+
+.avatar {
+    vertical-align: middle;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+.avatar:hover {
+    opacity: 0.5;
 }
