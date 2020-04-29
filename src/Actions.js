@@ -42,7 +42,7 @@ export const logoutUser = () => {
 }
 
 export const getFields = async(email) => {
-    let query = `query fields($email: String){fields(email: $email){fieldId location{coordinates}}}`;
+    let query = `query fields($email: String){fields(email: $email){fieldResId fieldId location{coordinates}}}`;
     let variables = { email };
     return fields => {
         fetch(serverURL, {
@@ -74,7 +74,7 @@ export const getFields = async(email) => {
 }
 
 export const getCrops = async(email) => {
-    let query = `query crops($email: String){crops(email: $email){cropId name}}`;
+    let query = `query crops($email: String){crops(email: $email){cropId name cropResId}}`;
     let variables = { email };
     return crops => {
         fetch(serverURL, {
@@ -105,9 +105,10 @@ export const getCrops = async(email) => {
     }
 }
 
-export const addCrop = async(owner, cropId, name) => {
-    let query = `mutation addCrop($owner: String, $cropId: String, $name: String){createCrop(owner: $owner, cropId: $cropId, name: $name){cropId}}`;
-    let variables = { cropId, name, owner };
+export const newCrop = async(owner, cropId, name) => {
+    let query = `mutation addCrop($owner: String, $cropId: String, $cropResId: String, $name: String){createCrop(owner: $owner, cropId: $cropId, name: $name, cropResId: $cropResId){cropResId cropId}}`;
+    let cropResId = `${owner}:crops:${cropId}`;
+    let variables = { cropId, name, owner, cropResId};
     return resp => {
         fetch(serverURL, {
             method: 'POST',
@@ -118,9 +119,12 @@ export const addCrop = async(owner, cropId, name) => {
         }).then(data => {
             return data.json();
         }).then(body => {
-            if(body.data.cropId){
+            if(body.data.createCrop.cropId){
                 resp({
                     type: "CROP_ADD_SUCCESS",
+                    payload: {
+                        cropId, name
+                    }
                 });
             } else {
                 resp({
@@ -136,9 +140,10 @@ export const addCrop = async(owner, cropId, name) => {
     }
 }
 
-export const removeField = async(fieldId) => {
-    let query = `mutation deleteField($fieldId: String){removeField(fieldId: $fieldId)}`;
-    let variables = { fieldId };
+export const newField = async(owner, fieldId, location) => {
+    let query = `mutation addField($owner: String, $fieldId: String, $location: GeoJSONInput, $fieldResId: String){createField(owner: $owner, fieldId: $fieldId, location: $location, fieldResId: $fieldResId){fieldId fieldResId}}`;
+    let fieldResId = `${owner}:fields:${fieldId}`;
+    let variables = { fieldResId, fieldId, owner, location };
     return resp => {
         fetch(serverURL, {
             method: 'POST',
@@ -149,9 +154,43 @@ export const removeField = async(fieldId) => {
         }).then(data => {
             return data.json();
         }).then(body => {
-            if(body){
+            if(body.data.createField.fieldId){
+                resp({
+                    type: "FIELD_ADD_SUCCESS",
+                    payload: body.data.createField.fieldId
+                });
+            } else {
+                resp({
+                    type: "FIELD_ADD_FAILED"
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+            resp({
+                type: "FIELD_ADD_FAILED"
+            });
+        });
+    }
+}
+
+export const deleteField = async(owner, fieldId) => {
+    let query = `mutation deleteField($fieldResId: String){removeField(fieldResId: $fieldResId)}`;
+    let fieldResId = `${owner}:fields:${fieldId}`;
+    let variables = { fieldResId };
+    return resp => {
+        fetch(serverURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ query, variables })
+        }).then(data => {
+            return data.json();
+        }).then(body => {
+            if(body.data.removeField){
                 resp({
                     type: "FIELD_REMOVAL_SUCCESS",
+                    payload: fieldId
                 });
             } else {
                 resp({
@@ -159,14 +198,15 @@ export const removeField = async(fieldId) => {
                 });
             }
         }).catch(err => {
-            console.error(err);
+            console.log(err);
         });
     }
 }
 
-export const removeCrop = async(cropId) => {
-    let query = `mutation deleteCrop($cropId: String){removeCrop(cropId: $cropId)}`;
-    let variables = { cropId };
+export const deleteCrop = async(owner, cropId) => {
+    let query = `mutation deleteCrop($cropResId: String){removeCrop(cropResId: $cropResId)}`;
+    let cropResId = `${owner}:crops:${cropId}`;
+    let variables = { cropResId };
     return resp => {
         fetch(serverURL, {
             method: 'POST',
@@ -177,9 +217,10 @@ export const removeCrop = async(cropId) => {
         }).then(data => {
             return data.json();
         }).then(body => {
-            if(body){
+            if(body.data.removeCrop){
                 resp({
                     type: "CROP_REMOVAL_SUCCESS",
+                    payload: cropId
                 });
             } else {
                 resp({
@@ -187,7 +228,7 @@ export const removeCrop = async(cropId) => {
                 });
             }
         }).catch(err => {
-            console.error(err);
+            console.log(err);
         });
     }
 }

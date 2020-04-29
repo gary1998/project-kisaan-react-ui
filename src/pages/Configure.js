@@ -1,6 +1,5 @@
 import React from 'react';
-import store from '../Store';
-import { getFields, getCrops, addCrop, removeField, removeCrop } from '../Actions';
+import { getFields, getCrops, newCrop, newField, deleteField, deleteCrop } from '../Actions';
 import { connect } from 'react-redux';
 const cropsDetails = require('../brain.json');
 
@@ -11,16 +10,10 @@ class Configure extends React.Component{
         selectedCrop: 'FR01'
     }
 
-    _handleEnvironmentPrepare = async() => {
-        store.dispatch(await getFields(this.props.user.email));
-        store.dispatch(await getCrops(this.props.user.email));
-    }
-
     constructor(props){
         super(props);
-        this._handleEnvironmentPrepare().then(() => {
-            this.setState({busyDeleting: false, busyAdding: false});
-        });
+        this.props.retrieveCrops(this.props.user.email);
+        this.props.retrieveFields(this.props.user.email);
     }
 
     _handleChangeCropSelection = (evt) => {
@@ -30,23 +23,34 @@ class Configure extends React.Component{
     _handleAddCrop = async(evt) => {
         evt.preventDefault();
         this.setState({busyAdding: true});
+        await this.count();
         let crop = cropsDetails.filter((crop) => {
             return crop.cropId===this.state.selectedCrop;
         });
-        store.dispatch(await addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name));
-        // window.location.reload();
+        await this.props.addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name);
+        this.setState({busyAdding: false});
     }
 
     deleteField = async(fieldId) => {
         this.setState({busyDeleting: true});
-        store.dispatch(await removeField(fieldId));
-        // window.location.reload();
+        await this.count();
+        await this.props.removeField(this.props.user.email, fieldId);
+        this.setState({busyDeleting: false});
     }
 
     deleteCrop = async(cropId) => {
         this.setState({busyDeleting: true});
-        store.dispatch(await removeCrop(cropId));
-        // window.location.reload();
+        await this.count();
+        await this.props.removeCrop(this.props.user.email, cropId);
+        this.setState({busyDeleting: false});
+    }
+
+    count = async() => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve();
+            }, 1000);
+        })
     }
 
     render(){
@@ -69,9 +73,9 @@ class Configure extends React.Component{
                                 </thead>
                                 <tbody>
                                     {
-                                        this.props.fields.length?this.props.fields.map(field => {
+                                        this.props.fields?this.props.fields.map(field => {
                                             return(
-                                                <tr key={field.fieldId}>
+                                                <tr key={field.fieldResId}>
                                                     <td>{field.fieldId}</td>
                                                     <td>{field.location.coordinates[0][0][0]}</td>
                                                     <td>{this.state.busyDeleting?<i className="fa fa-spin fa-trash-o" disabled/>:<i onClick={() => this.deleteField(field.fieldId)} className="deleteIcon fa fa-trash-o"/>}</td>
@@ -121,9 +125,9 @@ class Configure extends React.Component{
                                 </thead>
                                 <tbody>
                                     {
-                                        this.props.crops.length?this.props.crops.map(crop => {
+                                        this.props.crops?this.props.crops.map(crop => {
                                             return(
-                                                <tr key={crop.cropId}>
+                                                <tr key={crop.cropResId}>
                                                     <td>{crop.cropId}</td>
                                                     <td>{crop.name}</td>
                                                     <td>{this.state.busyDeleting?<i className="fa fa-spin fa-trash-o" disabled/>:<i onClick={() => this.deleteCrop(crop.cropId)} className="deleteIcon fa fa-trash-o"/>}</td>
@@ -144,7 +148,7 @@ class Configure extends React.Component{
     }
 }
 
-function mapStateToProps(state){
+const mapStateToProps = (state) =>{
     return {
         user: state.user,
         fields: state.fields,
@@ -153,4 +157,27 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(Configure);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addCrop: async(owner, cropId, name) => {
+            dispatch(await newCrop(owner, cropId, name))
+        },
+        removeCrop: async(owner, cropId) => {
+            dispatch(await deleteCrop(owner, cropId));
+        },
+        addField: async(fieldId, location, owner) => {
+            dispatch(await newField(fieldId, owner, location));
+        },
+        removeField: async(owner, fieldId) => {
+            dispatch(await deleteField(owner, fieldId));
+        },
+        retrieveCrops: async(email) => {
+            dispatch(await getCrops(email));
+        },
+        retrieveFields: async(email) => {
+            dispatch(await getFields(email));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Configure);

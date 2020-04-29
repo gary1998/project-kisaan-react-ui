@@ -26,10 +26,7 @@ export const reducer = (state, action) => {
             }
         }
         case "FIELDS_RETRIEVAL_FAILED": {
-            return {
-                ...state,
-                fields: ""
-            }
+            return state;
         }
         case "CROPS_RETRIEVAL_SUCCESS": {
             return {
@@ -38,46 +35,41 @@ export const reducer = (state, action) => {
             }
         }
         case "CROPS_RETRIEVAL_FAILED": {
-            return {
-                ...state,
-                crops: ""
-            }
+            return state;
         }
         case "CROP_ADD_SUCCESS": {
+            let crops = state.crops.concat(action.payload);
             return {
                 ...state,
-                last: "crop_added"
+                crops
             }
         }
         case "CROP_ADD_FAILED": {
-            return {
-                ...state,
-                last: "crop_not_added"
-            }
+            return state;
         }
         case "FIELD_REMOVAL_SUCCESS": {
+            let crops = state.crops.filter(crop => {
+                return crop.cropId!==action.payload
+            });
             return {
                 ...state,
-                last: "field_deleted"
+                crops
             }
         }
         case "FIELD_REMOVAL_FAILED": {
-            return {
-                ...state,
-                last: "field_not_deleted"
-            }
+            return state;
         }
         case "CROP_REMOVAL_SUCCESS": {
+            let crops = state.crops.filter(crop => {
+                return crop.cropId!==action.payload
+            });
             return {
                 ...state,
-                last: "crop_deleted"
+                crops
             }
         }
         case "CROP_REMOVAL_FAILED": {
-            return {
-                ...state,
-                last: "crop_not_deleted"
-            }
+            return state;
         }
         default:
             return state;
