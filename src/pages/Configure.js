@@ -1,6 +1,7 @@
 import React from 'react';
 import { getFields, getCrops, newCrop, newField, deleteField, deleteCrop } from '../Actions';
 import { connect } from 'react-redux';
+import Map from 'pigeon-maps';
 const cropsDetails = require('../brain.json');
 
 class Configure extends React.Component{
@@ -53,14 +54,27 @@ class Configure extends React.Component{
         })
     }
 
+    provider = {
+        osm: (x, y, z) => {
+            const s = String.fromCharCode(97 + (x + y + z) % 3)
+            return `https://${s}.tile.openstreetmap.org/${z}/${x}/${y}.png`
+        },
+        wikimedia: (x, y, z, dpr) => {
+            return `https://maps.wikimedia.org/osm-intl/${z}/${x}/${y}${dpr >= 2 ? '@2x' : ''}.png`
+        },
+        stamen: (x, y, z, dpr) => {
+            return `https://stamen-tiles.a.ssl.fastly.net/terrain/${z}/${x}/${y}${dpr >= 2 ? '@2x' : ''}.jpg`
+        }
+    }
+
     render(){
         return(
             <div className="configure-container">
                 <div id="fieldsSection">
                     <label>Fields Section</label>
                     <div className="pure-g">
-                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
-                            Map
+                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2 map">
+                            <Map center={[28.946755, 77.726754]} zoom={12} width={600} height={380} provider={this.provider['stamen']} />
                         </div>
                         <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
                             <table className="pure-table pure-table-bordered">
