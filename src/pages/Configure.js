@@ -34,19 +34,19 @@ class Configure extends React.Component{
             return crop.cropId===this.state.selectedCrop;
         });
         store.dispatch(await addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name));
-        window.location.reload();
+        // window.location.reload();
     }
 
     deleteField = async(fieldId) => {
         this.setState({busyDeleting: true});
         store.dispatch(await removeField(fieldId));
-        window.location.reload();
+        // window.location.reload();
     }
 
     deleteCrop = async(cropId) => {
         this.setState({busyDeleting: true});
         store.dispatch(await removeCrop(cropId));
-        window.location.reload();
+        // window.location.reload();
     }
 
     render(){
