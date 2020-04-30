@@ -254,7 +254,8 @@ const addFieldToAgro = (fieldData) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(fieldData)
-        }).then(data => {
+        }).then(async data => {
+            alert(data.ok);
             if(data.ok){
                 return data.json()
             } else {
@@ -272,9 +273,11 @@ const deleteFieldFromAgro = (fieldId) => {
         fetch(`${apiURL}/${fieldId}?appid=83e9d92cb19c29c0045da2e0282321f5`, {
             method: 'DELETE'
         }).then(data => {
+            alert(data.ok);
             if(data.ok){
                 resolve()
             } else {
+                alert(data.response);
                 console.log('error while deleting field from agro', data.statusText);
                 reject(data.statusText);
             }

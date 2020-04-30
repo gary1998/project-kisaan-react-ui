@@ -28,32 +28,32 @@ class Configure extends React.Component{
     _handleAddCrop = async(evt) => {
         evt.preventDefault();
         this.setState({busyAddingCrop: true});
-        await this.count(5000);
         let crop = cropsDetails.filter((crop) => {
             return crop.cropId===this.state.selectedCrop;
         });
         await this.props.addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name);
+        await this.count(5000);
         this.setState({busyAddingCrop: false});
     }
 
     _handleAddField = async() => {
         this.setState({busyAddingField: true});
-        await this.count(6500);
         await this.props.addField(this.props.user.email, this.state.fieldGeoJSON);
+        await this.count(6500);
         this.setState({busyAddingField: false});
     }
 
     deleteField = async(fieldId) => {
         this.setState({busyDeletingField: true});
-        await this.count(5000);
         await this.props.removeField(this.props.user.email, fieldId);
+        await this.count(5000);
         this.setState({busyDeletingField: false});
     }
 
     deleteCrop = async(cropId) => {
         this.setState({busyDeletingCrop: true});
-        await this.count(5000);
         await this.props.removeCrop(this.props.user.email, cropId);
+        await this.count(5000);
         this.setState({busyDeletingCrop: false});
     }
 
