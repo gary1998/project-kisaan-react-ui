@@ -6,9 +6,13 @@ const cropsDetails = require('../brain.json');
 
 class Configure extends React.Component{
     state = {
-        busyAdding: false,
-        busyDeleting: false,
-        selectedCrop: 'FR01'
+        busyAddingCrop: false,
+        busyDeletingCrop: false,
+        busyAddingField: false,
+        busyDeletingField: false,
+        selectedCrop: 'FR01',
+        fieldGeoJSON: {},
+        fieldName: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
     }
 
     constructor(props){
@@ -23,34 +27,41 @@ class Configure extends React.Component{
 
     _handleAddCrop = async(evt) => {
         evt.preventDefault();
-        this.setState({busyAdding: true});
-        await this.count();
+        this.setState({busyAddingCrop: true});
+        await this.count(5000);
         let crop = cropsDetails.filter((crop) => {
             return crop.cropId===this.state.selectedCrop;
         });
         await this.props.addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name);
-        this.setState({busyAdding: false});
+        this.setState({busyAddingCrop: false});
+    }
+
+    _handleAddField = async() => {
+        this.setState({busyAddingField: true});
+        await this.count(5000);
+        await this.props.addField(this.props.user.email, this.state.fieldGeoJSON);
+        this.setState({busyAddingField: false});
     }
 
     deleteField = async(fieldId) => {
-        this.setState({busyDeleting: true});
-        await this.count();
+        this.setState({busyDeletingField: true});
+        await this.count(5000);
         await this.props.removeField(this.props.user.email, fieldId);
-        this.setState({busyDeleting: false});
+        this.setState({busyDeletingField: false});
     }
 
     deleteCrop = async(cropId) => {
-        this.setState({busyDeleting: true});
-        await this.count();
+        this.setState({busyDeletingCrop: true});
+        await this.count(5000);
         await this.props.removeCrop(this.props.user.email, cropId);
-        this.setState({busyDeleting: false});
+        this.setState({busyDeletingCrop: false});
     }
 
-    count = async() => {
+    count = async(time) => {
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve();
-            }, 1000);
+            }, time);
         })
     }
 
@@ -67,6 +78,38 @@ class Configure extends React.Component{
         }
     }
 
+    _handleMapBoundChange = (data) => {
+        let ne = data.bounds.ne;
+        let sw = data.bounds.sw;
+        let nw = [sw[0], ne[1]];
+        let se = [ne[0], sw[1]];
+        let format = {
+            "name": this.state.fieldName,
+            "geo_json": {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    sw,
+                                    se,
+                                    ne,
+                                    nw,
+                                    sw,
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+        this.setState({fieldGeoJSON: format});
+    }
+
     render(){
         return(
             <div className="configure-container">
@@ -74,7 +117,11 @@ class Configure extends React.Component{
                     <label>Fields Section</label>
                     <div className="pure-g">
                         <div className="l-box-lrg pure-u-1 pure-u-md-1-2 map">
-                            <Map center={[28.946755, 77.726754]} zoom={12} width={600} height={380} provider={this.provider['stamen']} />
+                            <Map center={[28.946755, 77.726754]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['wikimedia']} />
+                            <span className="pure-form-message">Zoom to your fields (maximum 3000 Ha) and click on button below.</span>
+                            {
+                                this.state.busyAddingField?<button className="pure-button pure-button-disabled"><i className="fa fa-spin fa-spinner"/>&nbsp;Wait</button>:<button className="pure-button" onClick={this._handleAddField}>Add Field</button>
+                            }
                         </div>
                         <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
                             <table className="pure-table pure-table-bordered">
@@ -87,15 +134,19 @@ class Configure extends React.Component{
                                 </thead>
                                 <tbody>
                                     {
-                                        this.props.fields?this.props.fields.map(field => {
+                                        this.props.fields.length?
+                                        this.props.fields.map(field => {
+                                            let pt1 = field.data.geo_json.features[0].geometry.coordinates[0][0];
+                                            let pt2 = field.data.geo_json.features[0].geometry.coordinates[0][2];
                                             return(
-                                                <tr key={field.fieldResId}>
-                                                    <td>{field.fieldId}</td>
-                                                    <td>{field.location.coordinates[0][0][0]}</td>
-                                                    <td>{this.state.busyDeleting?<i className="fa fa-spin fa-trash-o" disabled/>:<i onClick={() => this.deleteField(field.fieldId)} className="deleteIcon fa fa-trash-o"/>}</td>
+                                                <tr key={field.data.name}>
+                                                    <td>{field.data.name}</td>
+                                                    <td>{pt1[0]+"\n"+pt1[1]+"\n"+pt2[0]+"\n"+pt2[1]}</td>
+                                                    <td>{this.state.busyDeletingField?<i className="fa pure-button-disabled fa-trash-o"/>:<i onClick={() => this.deleteField(field.data.name)} className="deleteIcon fa fa-trash-o"/>}</td>
                                                 </tr>
                                             )
-                                        }):
+                                        })
+                                        :
                                         <tr>
                                             <td colSpan={3}>No fields yet.</td>
                                         </tr>
@@ -121,10 +172,13 @@ class Configure extends React.Component{
                                         }
                                     </select>
                                     &nbsp;
+                                    {!this.state.busyAddingCrop?
                                     <button type="submit" className="pure-button">
-                                        {this.state.busyAdding?<i className="fa fa-spin fa-spinner" aria-hidden="true"></i>:""}
-                                        {this.state.busyAdding?" Wait":"Add"}
-                                    </button>
+                                        Add Crop
+                                    </button>:
+                                    <button type="submit" className="pure-button pure-button-disabled">
+                                        <i className="fa fa-spin fa-spinner"/>&nbsp;Wait
+                                    </button>}
                                 </fieldset>
                             </form>
                         </div>
@@ -139,12 +193,12 @@ class Configure extends React.Component{
                                 </thead>
                                 <tbody>
                                     {
-                                        this.props.crops?this.props.crops.map(crop => {
+                                        this.props.crops.length?this.props.crops.map(crop => {
                                             return(
-                                                <tr key={crop.cropResId}>
+                                                <tr key={crop.cropId}>
                                                     <td>{crop.cropId}</td>
                                                     <td>{crop.name}</td>
-                                                    <td>{this.state.busyDeleting?<i className="fa fa-spin fa-trash-o" disabled/>:<i onClick={() => this.deleteCrop(crop.cropId)} className="deleteIcon fa fa-trash-o"/>}</td>
+                                                    <td>{this.state.busyDeletingCrop?<i className="fa pure-button-disabled fa-trash-o"/>:<i onClick={() => this.deleteCrop(crop.cropId)} className="deleteIcon fa fa-trash-o"/>}</td>
                                                 </tr>
                                             )
                                         }):
@@ -179,8 +233,8 @@ const mapDispatchToProps = (dispatch) => {
         removeCrop: async(owner, cropId) => {
             dispatch(await deleteCrop(owner, cropId));
         },
-        addField: async(fieldId, location, owner) => {
-            dispatch(await newField(fieldId, owner, location));
+        addField: async(owner, data) => {
+            dispatch(await newField(owner, data));
         },
         removeField: async(owner, fieldId) => {
             dispatch(await deleteField(owner, fieldId));

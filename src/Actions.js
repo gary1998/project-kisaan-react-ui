@@ -1,4 +1,5 @@
 const serverURL= "https://project-kisaan-graphql-server.herokuapp.com/graphql";
+const apiURL = "http://api.agromonitoring.com/agro/1.0/polygons";
 
 export const loginUser = async(email, password) => {
     let query = `query login($email: String, $password: String){login(email: $email, password: $password){name photo email}}`;
@@ -25,7 +26,7 @@ export const loginUser = async(email, password) => {
                 });
             }
         }).catch(err => {
-            console.log(err);
+            console.log('error while loggin in', err);
             user({
                 type: "LOGIN_FAILED"
             });
@@ -42,7 +43,7 @@ export const logoutUser = () => {
 }
 
 export const getFields = async(email) => {
-    let query = `query fields($email: String){fields(email: $email){fieldResId fieldId location{coordinates}}}`;
+    let query = `query fields($email: String){fields(email: $email){data{name geo_json{features{geometry{coordinates}}}}}}`;
     let variables = { email };
     return fields => {
         fetch(serverURL, {
@@ -65,7 +66,7 @@ export const getFields = async(email) => {
                 });
             }
         }).catch(err => {
-            console.log(err);
+            console.log('error while retrieving fields', err);
             fields({
                 type: "FIELDS_RETRIEVAL_FAILED"
             });
@@ -97,7 +98,7 @@ export const getCrops = async(email) => {
                 });
             }
         }).catch(err => {
-            console.log(err);
+            console.log('error while retrieving crops', err);
             crops({
                 type: "CROPS_RETRIEVAL_FAILED"
             });
@@ -132,7 +133,7 @@ export const newCrop = async(owner, cropId, name) => {
                 });
             }
         }).catch(err => {
-            console.log(err);
+            console.log('error while adding crop', err);
             resp({
                 type: "CROP_ADD_FAILED"
             });
@@ -140,66 +141,78 @@ export const newCrop = async(owner, cropId, name) => {
     }
 }
 
-export const newField = async(owner, fieldId, location) => {
-    let query = `mutation addField($owner: String, $fieldId: String, $location: GeoJSONInput, $fieldResId: String){createField(owner: $owner, fieldId: $fieldId, location: $location, fieldResId: $fieldResId){fieldId fieldResId}}`;
-    let fieldResId = `${owner}:fields:${fieldId}`;
-    let variables = { fieldResId, fieldId, owner, location };
+export const newField = async(owner, data) => {
     return resp => {
-        fetch(serverURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ query, variables })
-        }).then(data => {
-            return data.json();
-        }).then(body => {
-            if(body.data.createField.fieldId){
-                resp({
-                    type: "FIELD_ADD_SUCCESS",
-                    payload: body.data.createField.fieldId
-                });
-            } else {
+        addFieldToAgro(data).then(body => {
+            let fieldResId = `${owner}:fields:${body.id}`;
+            let query = `mutation addField($owner: String, $data: FieldInputData, $fieldResId: String){createField(owner: $owner, data: $data, fieldResId: $fieldResId){fieldResId data{name geo_json{features{geometry{coordinates}}}}}}`;
+            delete data.geo_json.features[0].properties;
+            let variables = { fieldResId, owner, data };
+            fetch(serverURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query, variables })
+            }).then(data => {
+                return data.json();
+            }).then(body => {
+                if(body.data.createField.data){
+                    resp({
+                        type: "FIELD_ADD_SUCCESS",
+                        payload: body.data.createField
+                    });
+                } else {
+                    resp({
+                        type: "FIELD_ADD_FAILED"
+                    });
+                }
+            }).catch(err => {
+                console.log('error while adding field to db', err);
                 resp({
                     type: "FIELD_ADD_FAILED"
                 });
-            }
+            });
         }).catch(err => {
-            console.log(err);
+            console.log('error while adding field to api', err);
             resp({
                 type: "FIELD_ADD_FAILED"
-            });
-        });
+            })
+        })
     }
 }
 
-export const deleteField = async(owner, fieldId) => {
-    let query = `mutation deleteField($fieldResId: String){removeField(fieldResId: $fieldResId)}`;
-    let fieldResId = `${owner}:fields:${fieldId}`;
-    let variables = { fieldResId };
+export const deleteField = async(owner, fieldName) => {
     return resp => {
-        fetch(serverURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ query, variables })
-        }).then(data => {
-            return data.json();
-        }).then(body => {
-            if(body.data.removeField){
-                resp({
-                    type: "FIELD_REMOVAL_SUCCESS",
-                    payload: fieldId
-                });
-            } else {
-                resp({
-                    type: "FIELD_REMOVAL_FAILED"
-                });
-            }
+        deleteFieldFromAgro(fieldName).then(() => {
+            let query = `mutation deleteField($fieldResId: String){removeField(fieldResId: $fieldResId)}`;
+            let fieldResId = `${owner}:fields:${fieldName}`;
+            let variables = { fieldResId };
+            fetch(serverURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query, variables })
+            }).then(data => {
+                return data.json();
+            }).then(body => {
+                if(body.data.removeField){
+                    resp({
+                        type: "FIELD_REMOVAL_SUCCESS",
+                        payload: fieldName
+                    });
+                } else {
+                    resp({
+                        type: "FIELD_REMOVAL_FAILED"
+                    });
+                }
+            }).catch(err => {
+                console.log('error while deleting field', err);
+            });
         }).catch(err => {
-            console.log(err);
-        });
+            console.log('error while deleting field from api', err);
+        })
     }
 }
 
@@ -228,7 +241,43 @@ export const deleteCrop = async(owner, cropId) => {
                 });
             }
         }).catch(err => {
-            console.log(err);
+            console.log('error while deleting crop', err);
         });
     }
+}
+
+const addFieldToAgro = (fieldData) => {
+    return new Promise((resolve, reject) => {
+        fetch(`${apiURL}?appid=83e9d92cb19c29c0045da2e0282321f5`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(fieldData)
+        }).then(data => {
+            if(data.ok){
+                return data.json()
+            } else {
+                console.log('error while adding field to agro', data.statusText);
+                reject(data.statusText);
+            }
+        }).then(body => {
+            resolve(body);
+        })
+    })
+}
+
+const deleteFieldFromAgro = (fieldId) => {
+    return new Promise((resolve, reject) => {
+        fetch(`${apiURL}/${fieldId}?appid=83e9d92cb19c29c0045da2e0282321f5`, {
+            method: 'DELETE'
+        }).then(data => {
+            if(data.ok){
+                resolve()
+            } else {
+                console.log('error while deleting field from agro', data.statusText);
+                reject(data.statusText);
+            }
+        })
+    })
 }

@@ -37,6 +37,16 @@ export const reducer = (state, action) => {
         case "CROPS_RETRIEVAL_FAILED": {
             return state;
         }
+        case "FIELD_ADD_SUCCESS": {
+            let fields = state.fields.concat(action.payload);
+            return {
+                ...state,
+                fields
+            }
+        }
+        case "FIELD_ADD_FAILED": {
+            return state;
+        }
         case "CROP_ADD_SUCCESS": {
             let crops = state.crops.concat(action.payload);
             return {
@@ -48,12 +58,12 @@ export const reducer = (state, action) => {
             return state;
         }
         case "FIELD_REMOVAL_SUCCESS": {
-            let crops = state.crops.filter(crop => {
-                return crop.cropId!==action.payload
+            let fields = state.fields.filter(field => {
+                return field.data.name!==action.payload
             });
             return {
                 ...state,
-                crops
+                fields
             }
         }
         case "FIELD_REMOVAL_FAILED": {
