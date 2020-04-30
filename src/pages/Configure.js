@@ -118,7 +118,7 @@ class Configure extends React.Component{
                     <div className="pure-g">
                         <div className="l-box-lrg pure-u-1 pure-u-md-1-2 map">
                             <Map center={[28.946755, 77.726754]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['osm']} />
-                            <span className="pure-form-message">Zoom to your fields (maximum 3000 Ha) and click on button below.</span>
+                            <span className="pure-form-message">Zoom to your fields (1 Ha to 3000 Ha) and click on button below.</span>
                             {
                                 this.state.busyAddingField?<button className="pure-button pure-button-disabled"><i className="fa fa-spin fa-spinner"/>&nbsp;Wait</button>:<button className="pure-button" onClick={this._handleAddField}>Add Field</button>
                             }
