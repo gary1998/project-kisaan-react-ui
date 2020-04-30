@@ -10,19 +10,25 @@ class Splash extends React.Component {
         password: "",
         busy: false,
     }
-    componentWillReceiveProps(){
-        this.setState({busy: false, email: "", password: ""});
-    }
     _handleLoginSubmit = async(evt) => {
         evt.preventDefault();
         this.setState({busy: true});
         store.dispatch(await loginUser(this.state.email, this.state.password));
+        await this.count(1000);
+        this.setState({busy: false, email: "", password: ""});
     }
     _handleEmailChange = (evt) => {
         this.setState({email: evt.target.value});
     }
     _handlePasswordChange = (evt) => {
         this.setState({password: evt.target.value});
+    }
+    count = async(time) => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve();
+            }, time);
+        })
     }
     render(){
         return(
@@ -89,10 +95,15 @@ class Splash extends React.Component {
                                             <input id="email" type="email" value={this.state.email} onChange={this._handleEmailChange} placeholder="mark@example.com" required/>
                                             <label htmlFor="password">Your Password</label>
                                             <input id="password" type="password" value={this.state.password} onChange={this._handlePasswordChange} placeholder="*****" required/>
-                                            <button type="submit" className="pure-button">
-                                                {this.state.busy?<i className="fa fa-spin fa-spinner" aria-hidden="true"></i>:""}
-                                                {this.state.busy?" Wait":"Login"}
-                                            </button>
+                                            {
+                                                this.state.busy?
+                                                <button type="submit" className="pure-button pure-button-disabled">
+                                                    <i className="fa fa-spin fa-spinner" aria-hidden="true" />&nbsp;Wait
+                                                </button>:
+                                                <button type="submit" className="pure-button">
+                                                    Login
+                                                </button>
+                                            }
                                         </fieldset>
                                         <p>Trouble logging in? <Link to="/recovery">Help</Link></p>
                                     </form>:

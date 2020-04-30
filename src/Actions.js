@@ -43,7 +43,7 @@ export const logoutUser = () => {
 }
 
 export const getFields = async(email) => {
-    let query = `query fields($email: String){fields(email: $email){data{name geo_json{features{geometry{coordinates}}}}}}`;
+    let query = `query fields($email: String){fields(email: $email){fieldResId data{name geo_json{features{geometry{coordinates}}}}}}`;
     let variables = { email };
     return fields => {
         fetch(serverURL, {
@@ -182,11 +182,11 @@ export const newField = async(owner, data) => {
     }
 }
 
-export const deleteField = async(owner, fieldName) => {
+export const deleteField = async(owner, id) => {
     return resp => {
-        deleteFieldFromAgro(fieldName).then(() => {
+        deleteFieldFromAgro(id).then(() => {
             let query = `mutation deleteField($fieldResId: String){removeField(fieldResId: $fieldResId)}`;
-            let fieldResId = `${owner}:fields:${fieldName}`;
+            let fieldResId = `${owner}:fields:${id}`;
             let variables = { fieldResId };
             fetch(serverURL, {
                 method: 'POST',
@@ -200,7 +200,7 @@ export const deleteField = async(owner, fieldName) => {
                 if(body.data.removeField){
                     resp({
                         type: "FIELD_REMOVAL_SUCCESS",
-                        payload: fieldName
+                        payload: fieldResId
                     });
                 } else {
                     resp({

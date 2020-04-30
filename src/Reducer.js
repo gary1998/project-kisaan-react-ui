@@ -59,7 +59,7 @@ export const reducer = (state, action) => {
         }
         case "FIELD_REMOVAL_SUCCESS": {
             let fields = state.fields.filter(field => {
-                return field.data.name!==action.payload
+                return field.fieldResId!==action.payload
             });
             return {
                 ...state,
