@@ -1,5 +1,5 @@
 const serverURL= "https://project-kisaan-graphql-server.herokuapp.com/graphql";
-const apiURL = "http://api.agromonitoring.com/agro/1.0/polygons";
+const apiURL = "https://api.agromonitoring.com/agro/1.0/polygons";
 
 export const loginUser = async(email, password) => {
     let query = `query login($email: String, $password: String){login(email: $email, password: $password){name photo email}}`;
