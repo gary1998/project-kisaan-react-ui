@@ -36,9 +36,9 @@ class Splash extends React.Component {
                 <div className="splash-container">
                     <div className="splash">
                         <h1 className="splash-head"><img alt="Splash" src="img/logo-128.png"/></h1>
-                        <p className="splash-subhead">
-                            Project Kisaan - As the name suggests, it's all about Kissan.
-                        </p>
+                        <div className="splash-subhead">
+                            <strong>Project Kisaan</strong>, because everyone is a farmer by heart.
+                        </div>
                     </div>
                 </div>
                 <div className="content-wrapper">
