@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/project-kisaan-react-ui/static/css/main.4fe4a24a.chunk.css",
-    "main.js": "/project-kisaan-react-ui/static/js/main.e975e76c.chunk.js",
-    "main.js.map": "/project-kisaan-react-ui/static/js/main.e975e76c.chunk.js.map",
-    "runtime-main.js": "/project-kisaan-react-ui/static/js/runtime-main.8ab7ef9b.js",
-    "runtime-main.js.map": "/project-kisaan-react-ui/static/js/runtime-main.8ab7ef9b.js.map",
-    "static/css/2.4cca55f4.chunk.css": "/project-kisaan-react-ui/static/css/2.4cca55f4.chunk.css",
-    "static/js/2.6f81971d.chunk.js": "/project-kisaan-react-ui/static/js/2.6f81971d.chunk.js",
-    "static/js/2.6f81971d.chunk.js.map": "/project-kisaan-react-ui/static/js/2.6f81971d.chunk.js.map",
+    "main.css": "/project-kisaan-react-ui/static/css/main.71389443.chunk.css",
+    "main.js": "/project-kisaan-react-ui/static/js/main.f09e79ed.chunk.js",
+    "main.js.map": "/project-kisaan-react-ui/static/js/main.f09e79ed.chunk.js.map",
+    "runtime-main.js": "/project-kisaan-react-ui/static/js/runtime-main.43278508.js",
+    "runtime-main.js.map": "/project-kisaan-react-ui/static/js/runtime-main.43278508.js.map",
+    "static/css/2.ce22b50a.chunk.css": "/project-kisaan-react-ui/static/css/2.ce22b50a.chunk.css",
+    "static/js/2.c8459f48.chunk.js": "/project-kisaan-react-ui/static/js/2.c8459f48.chunk.js",
+    "static/js/2.c8459f48.chunk.js.map": "/project-kisaan-react-ui/static/js/2.c8459f48.chunk.js.map",
     "index.html": "/project-kisaan-react-ui/index.html",
-    "precache-manifest.c80cf1d422c9313b5aee2d384a30b632.js": "/project-kisaan-react-ui/precache-manifest.c80cf1d422c9313b5aee2d384a30b632.js",
+    "precache-manifest.52645fcee6aa5c890c3ad24bdd1937eb.js": "/project-kisaan-react-ui/precache-manifest.52645fcee6aa5c890c3ad24bdd1937eb.js",
     "service-worker.js": "/project-kisaan-react-ui/service-worker.js",
-    "static/css/2.4cca55f4.chunk.css.map": "/project-kisaan-react-ui/static/css/2.4cca55f4.chunk.css.map",
-    "static/css/main.4fe4a24a.chunk.css.map": "/project-kisaan-react-ui/static/css/main.4fe4a24a.chunk.css.map",
-    "static/js/2.6f81971d.chunk.js.LICENSE.txt": "/project-kisaan-react-ui/static/js/2.6f81971d.chunk.js.LICENSE.txt"
+    "static/css/2.ce22b50a.chunk.css.map": "/project-kisaan-react-ui/static/css/2.ce22b50a.chunk.css.map",
+    "static/css/main.71389443.chunk.css.map": "/project-kisaan-react-ui/static/css/main.71389443.chunk.css.map",
+    "static/js/2.c8459f48.chunk.js.LICENSE.txt": "/project-kisaan-react-ui/static/js/2.c8459f48.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.8ab7ef9b.js",
-    "static/css/2.4cca55f4.chunk.css",
-    "static/js/2.6f81971d.chunk.js",
-    "static/css/main.4fe4a24a.chunk.css",
-    "static/js/main.e975e76c.chunk.js"
+    "static/js/runtime-main.43278508.js",
+    "static/css/2.ce22b50a.chunk.css",
+    "static/js/2.c8459f48.chunk.js",
+    "static/css/main.71389443.chunk.css",
+    "static/js/main.f09e79ed.chunk.js"
   ]
 }
