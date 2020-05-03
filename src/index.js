@@ -1,5 +1,6 @@
-import 'purecss/build/pure.css';
-import 'purecss/build/grids-responsive.css';
+// import 'purecss/build/pure.css';
+// import 'purecss/build/grids-responsive.css';
+import 'carbon-components/css/carbon-components.css';
 import store from './Store';
 import { Provider } from 'react-redux';
 import React from 'react';

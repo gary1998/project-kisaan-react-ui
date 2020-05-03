@@ -1,6 +1,14 @@
 const serverURL= "https://project-kisaan-graphql-server.herokuapp.com/graphql";
 const apiURL = "https://api.agromonitoring.com/agro/1.0/polygons";
 
+export const setBusy = async() => {
+    return resp => {
+        resp({
+            type: "APP_BUSY"
+        });
+    }
+}
+
 export const loginUser = async(email, password) => {
     let query = `query login($email: String, $password: String){login(email: $email, password: $password){name photo email}}`;
     let variables = { email, password };
@@ -34,7 +42,7 @@ export const loginUser = async(email, password) => {
     }
 }
 
-export const logoutUser = () => {
+export const logoutUser = async() => {
     return user => {
         user({
             type: "LOGOUT",

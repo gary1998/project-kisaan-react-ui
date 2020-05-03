@@ -1,15 +1,34 @@
 import React from 'react';
-import { getFields, getCrops, newCrop, newField, deleteField, deleteCrop } from '../Actions';
+import {
+    Grid,
+    Row,
+    Column,
+    DataTable,
+    Button,
+    Select,
+    SelectItem,
+    Form,
+    FormGroup,
+    Loading
+} from 'carbon-components-react'; 
+import { getFields, getCrops, newCrop, newField, deleteField, deleteCrop, setBusy } from '../Actions';
 import { connect } from 'react-redux';
 import Map from 'pigeon-maps';
+import TrashCan20 from "@carbon/icons-react/lib/trash-can/20";
+import Add20 from "@carbon/icons-react/lib/add/20";
 const cropsDetails = require('../brain.json');
+const {
+    TableContainer,
+    Table,
+    TableHead,
+    TableRow,
+    TableBody,
+    TableCell,
+    TableHeader,
+} = DataTable; 
 
 class Configure extends React.Component{
     state = {
-        busyAddingCrop: false,
-        busyDeletingCrop: false,
-        busyAddingField: false,
-        busyDeletingField: false,
         selectedCrop: 'FR01',
         fieldGeoJSON: {},
         fieldName: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
@@ -26,43 +45,22 @@ class Configure extends React.Component{
     }
 
     _handleAddCrop = async(evt) => {
-        evt.preventDefault();
-        this.setState({busyAddingCrop: true});
         let crop = cropsDetails.filter((crop) => {
             return crop.cropId===this.state.selectedCrop;
         });
         await this.props.addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name);
-        await this.count(5000);
-        this.setState({busyAddingCrop: false});
     }
 
     _handleAddField = async() => {
-        this.setState({busyAddingField: true});
         await this.props.addField(this.props.user.email, this.state.fieldGeoJSON);
-        await this.count(6500);
-        this.setState({busyAddingField: false});
     }
 
     deleteField = async(fieldId) => {
-        this.setState({busyDeletingField: true});
         await this.props.removeField(this.props.user.email, fieldId);
-        await this.count(5000);
-        this.setState({busyDeletingField: false});
     }
 
     deleteCrop = async(cropId) => {
-        this.setState({busyDeletingCrop: true});
         await this.props.removeCrop(this.props.user.email, cropId);
-        await this.count(5000);
-        this.setState({busyDeletingCrop: false});
-    }
-
-    count = async(time) => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve();
-            }, time);
-        })
     }
 
     provider = {
@@ -112,27 +110,39 @@ class Configure extends React.Component{
 
     render(){
         return(
-            <div className="configure-container">
-                <div id="fieldsSection">
-                    <label>Fields Section</label>
-                    <div className="pure-g">
-                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2 map">
-                            <Map center={[28.946755, 77.726754]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['osm']} />
-                            <span className="pure-form-message">Zoom to your fields (1 Ha to 3000 Ha) and click on button below.</span>
-                            {
-                                this.state.busyAddingField?<button className="pure-button pure-button-disabled"><i className="fa fa-spin fa-spinner"/>&nbsp;Wait</button>:<button className="pure-button" onClick={this._handleAddField}>Add Field</button>
-                            }
+            <Grid>
+                {this.props.busy?<Loading withOverlay={true} active={this.props.busy}/>:<></>}
+                <Row>
+                    <h2 style={{width: '100%', textAlign: 'center'}}>Fields Section</h2>
+                </Row>
+                <br/>
+                <Row>
+                    <Column sm={4} lg={6} style={{textAlign: 'center'}}>
+                        <Map center={[28.946755, 77.726754]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['osm']} />
+                        <div className="bx--form__helper-text" style={{maxWidth: '100%'}}>
+                            Zoom to your fields (1 Ha to 3000 Ha) and click on button below.
                         </div>
-                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
-                            <table className="pure-table pure-table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Field Id</th>
-                                        <th>Field Location</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <Button renderIcon={Add20} onClick={this._handleAddField}>
+                            Add
+                        </Button>
+                    </Column>
+                    <Column sm={4} lg={6}>
+                        <TableContainer title="Your Fields">
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableHeader key="fieldId">
+                                            Field Id
+                                        </TableHeader>
+                                        <TableHeader key="fieldLoc">
+                                            Field Location
+                                        </TableHeader>
+                                        <TableHeader key="delete">
+
+                                        </TableHeader>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
                                     {
                                         this.props.fields.length?
                                         this.props.fields.map(field => {
@@ -140,80 +150,125 @@ class Configure extends React.Component{
                                             let id = field.fieldResId.substring(seperator+1);
                                             let pt1 = field.data.geo_json.features[0].geometry.coordinates[0][0];
                                             let pt2 = field.data.geo_json.features[0].geometry.coordinates[0][2];
-                                            return(
-                                                <tr key={field.fieldResId}>
-                                                    <td>{id}</td>
-                                                    <td>{pt1[0]+"\n"+pt1[1]+"\n"+pt2[0]+"\n"+pt2[1]}</td>
-                                                    <td>{this.state.busyDeletingField?<i className="fa pure-button-disabled fa-trash-o"/>:<i onClick={() => this.deleteField(id)} className="deleteIcon fa fa-trash-o"/>}</td>
-                                                </tr>
-                                            )
-                                        })
-                                        :
-                                        <tr>
-                                            <td colSpan={3}>No fields yet.</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <section id="cropsSection">
-                    <label>Crops Section</label>
-                    <div className="pure-g">
-                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
-                            <form className="pure-form" onSubmit={this._handleAddCrop}>
-                                <fieldset>
-                                    <select id="state" value={this.state.selectedCrop} onChange={this._handleChangeCropSelection}>
-                                        {
-                                            cropsDetails.map(crop => {
-                                                return (
-                                                    <option key={crop.cropId} value={crop.cropId}>{crop.name}</option>
-                                                )
-                                            })
-                                        }
-                                    </select>
-                                    &nbsp;
-                                    {!this.state.busyAddingCrop?
-                                    <button type="submit" className="pure-button">
-                                        Add Crop
-                                    </button>:
-                                    <button type="submit" className="pure-button pure-button-disabled">
-                                        <i className="fa fa-spin fa-spinner"/>&nbsp;Wait
-                                    </button>}
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
-                            <table className="pure-table pure-table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Crop Id</th>
-                                        <th>Crop Name</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        this.props.crops.length?this.props.crops.map(crop => {
-                                            return(
-                                                <tr key={crop.cropId}>
-                                                    <td>{crop.cropId}</td>
-                                                    <td>{crop.name}</td>
-                                                    <td>{this.state.busyDeletingCrop?<i className="fa pure-button-disabled fa-trash-o"/>:<i onClick={() => this.deleteCrop(crop.cropId)} className="deleteIcon fa fa-trash-o"/>}</td>
-                                                </tr>
+                                            return (
+                                            <TableRow key={field.fieldResId}>
+                                                <TableCell>
+                                                    {id}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {pt1[0]+"\n"+pt1[1]+"\n"+pt2[0]+"\n"+pt2[1]}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Button 
+                                                        kind="ghost"
+                                                        tabIndex={0}
+                                                        hasonlyicon="true"
+                                                        renderIcon={TrashCan20}
+                                                        iconDescription="Delete"
+                                                        onClick={() => {this.deleteField(id)}}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
                                             )
                                         }):
-                                        <tr>
-                                            <td colSpan={3}>No crops yet.</td>
-                                        </tr>
+                                        <TableRow>
+                                            <TableCell colspan={2}>
+                                                No fields yet
+                                            </TableCell>
+                                        </TableRow>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Column>
+                </Row>
+                <br/>
+                <Row>
+                    <h2 style={{width: '100%', textAlign: 'center'}}>Crops Section</h2>
+                </Row>
+                <br/>
+                <Row>
+                    <Column sm={4} lg={6}>
+                    <Form>
+                        <FormGroup>
+                        <Select
+                            helperText="Select crop to add"
+                            labelText="Crop"
+                            inline={false}
+                            defaultValue={this.state.selectedCrop}
+                            onChange={this._handleChangeCropSelection}
+                        >
+                            {
+                                cropsDetails.map(crop => {
+                                    return(
+                                        <SelectItem text={crop.name} value={crop.cropId} />
+                                    )
+                                })
+                            }
+                        </Select>
+                        <br />
+                        <Button
+                            renderIcon={Add20}
+                            onClick={this._handleAddCrop}
+                        >
+                            Add
+                        </Button>
+                        </FormGroup>
+                        </Form>
+                    </Column>
+                    <Column sm={4} lg={6}>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableHeader key="cropId">
+                                            Crop Id
+                                        </TableHeader>
+                                        <TableHeader key="cropName">
+                                            Crop Name
+                                        </TableHeader>
+                                        <TableHeader key="delete">
+
+                                        </TableHeader>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        this.props.crops.length?
+                                        this.props.crops.map(crop => {
+                                            return (
+                                                <TableRow key={crop.cropId}>
+                                                    <TableCell>
+                                                        {crop.cropId}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {crop.name}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Button
+                                                            kind="ghost"
+                                                            tabIndex={0}
+                                                            hasonlyicon="true"
+                                                            renderIcon={TrashCan20}
+                                                            iconDescription="Delete"
+                                                            onClick={() => {this.deleteCrop(crop.cropId)}}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
+                                        }):
+                                        <TableRow>
+                                            <TableCell colspan={2}>
+                                                No crops yet
+                                            </TableCell>
+                                        </TableRow>
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Column>
+                </Row>
+            </Grid>
         )
     }
 }
@@ -223,28 +278,35 @@ const mapStateToProps = (state) =>{
         user: state.user,
         fields: state.fields,
         crops: state.crops,
-        last: state.last
+        last: state.last,
+        busy: state.busy
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         addCrop: async(owner, cropId, name) => {
+            dispatch(await setBusy());
             dispatch(await newCrop(owner, cropId, name))
         },
         removeCrop: async(owner, cropId) => {
+            dispatch(await setBusy());
             dispatch(await deleteCrop(owner, cropId));
         },
         addField: async(owner, data) => {
+            dispatch(await setBusy());
             dispatch(await newField(owner, data));
         },
         removeField: async(owner, fieldId) => {
+            dispatch(await setBusy());
             dispatch(await deleteField(owner, fieldId));
         },
         retrieveCrops: async(email) => {
+            dispatch(await setBusy());
             dispatch(await getCrops(email));
         },
         retrieveFields: async(email) => {
+            dispatch(await setBusy());
             dispatch(await getFields(email));
         }
     }
