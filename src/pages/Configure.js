@@ -81,7 +81,6 @@ class Configure extends React.Component{
         let sw = [data.bounds.sw[1], data.bounds.sw[0]];
         let nw = [sw[0], ne[1]];
         let se = [ne[0], sw[1]];
-        console.log({ne, sw, nw, se});
         let format = {
             "name": this.state.fieldName,
             "geo_json": {

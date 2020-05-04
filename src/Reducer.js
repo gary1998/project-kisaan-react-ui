@@ -23,6 +23,7 @@ export const reducer = (state, action) => {
         }
         case "LOGOUT": {
             localStorage.setItem('projectkisaanstate', '');
+            window.location.href="/";
             return {
                 ...state,
                 busy: false,
