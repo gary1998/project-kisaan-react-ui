@@ -18,6 +18,7 @@ class App extends React.Component {
           <HashRouter>
             <Content>
               <Route exact path="/" render={() => <Splash />}></Route>
+              <Route exact path="/home" render={() => <Splash />}></Route>
               <Route path="/dashboard" render={() => <Dashboard/>}></Route>
               <Route path="/chat" render={() => <Chat/>}></Route>
               <Route path="/faq" render={() => <FAQ/>}></Route>

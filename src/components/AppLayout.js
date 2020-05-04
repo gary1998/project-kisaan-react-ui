@@ -47,7 +47,7 @@ class AppLayout extends React.Component {
               onClick={() => this.setState({sideNav: !this.state.sideNav})}
               isActive={this.state.sideNav}
             />
-              <HeaderName href="/" prefix="">
+              <HeaderName href="#home" prefix="">
                 Project Kisaan
               </HeaderName>
             <HeaderGlobalBar>
@@ -108,7 +108,7 @@ class AppLayout extends React.Component {
             </HeaderGlobalBar>
             <SideNav aria-label="Side navigation" isRail={true} defaultExpanded={false} expanded={this.state.sideNav}>
               <SideNavItems>
-                  <Link to="/">
+                  <Link to="/home">
                     <SideNavLink renderIcon={Home20}>
                       Home
                     </SideNavLink>
