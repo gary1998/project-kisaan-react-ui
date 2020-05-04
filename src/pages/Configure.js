@@ -77,10 +77,11 @@ class Configure extends React.Component{
     }
 
     _handleMapBoundChange = (data) => {
-        let ne = data.bounds.ne;
-        let sw = data.bounds.sw;
+        let ne = [data.bounds.ne[1], data.bounds.ne[0]];
+        let sw = [data.bounds.sw[1], data.bounds.sw[0]];
         let nw = [sw[0], ne[1]];
         let se = [ne[0], sw[1]];
+        console.log({ne, sw, nw, se});
         let format = {
             "name": this.state.fieldName,
             "geo_json": {
@@ -118,7 +119,7 @@ class Configure extends React.Component{
                 <br/>
                 <Row>
                     <Column sm={4} lg={6} style={{textAlign: 'center'}}>
-                        <Map center={[28.946755, 77.726754]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['osm']} />
+                        <Map center={[28.946755, 77.726754]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['wikimedia']} />
                         <div className="bx--form__helper-text" style={{maxWidth: '100%'}}>
                             Zoom to your fields (1 Ha to 3000 Ha) and click on button below.
                         </div>
@@ -172,7 +173,7 @@ class Configure extends React.Component{
                                             )
                                         }):
                                         <TableRow>
-                                            <TableCell colspan={2}>
+                                            <TableCell colspan={3}>
                                                 No fields yet
                                             </TableCell>
                                         </TableRow>
@@ -258,7 +259,7 @@ class Configure extends React.Component{
                                             )
                                         }):
                                         <TableRow>
-                                            <TableCell colspan={2}>
+                                            <TableCell colspan={3}>
                                                 No crops yet
                                             </TableCell>
                                         </TableRow>
