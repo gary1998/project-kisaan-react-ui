@@ -1,3 +1,27 @@
 a {
     text-decoration: none;
 }
+
+.inline {
+    display: inline-block;
+}
+
+.card {
+    border: 2px solid #ccc;
+    background-color: #ffffff;
+    padding: 5px 5px 5px 5px;
+}
+
+.card-body {
+    /* border-spacing: 15px; */
+    margin-bottom: 15px;
+}
+
+.card-icon {
+    float: right;
+}
+
+.card-body-value {
+    float: right;
+    margin-right: 0px;
+}

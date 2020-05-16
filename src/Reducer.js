@@ -130,6 +130,71 @@ export const reducer = (state, action) => {
                 busy: false
             };
         }
+        case "CURRENT_WEATHER_RETRIEVAL_SUCCESS": {
+            return {
+                ...state,
+                currentWeather: action.payload,
+                busy: false
+            }
+        }
+        case "CURRENT_WEATHER_RETRIEVAL_FAILED": {
+            return {
+                ...state,
+                busy: false
+            }
+        }
+        case "FORECAST_WEATHER_RETRIEVAL_SUCCESS": {
+            return {
+                ...state,
+                forecastWeather: action.payload,
+                busy: false
+            }
+        }
+        case "FORECAST_WEATHER_RETRIEVAL_FAILED": {
+            return {
+                ...state,
+                busy: false
+            }
+        }
+        case "SOIL_DATA_RETRIEVAL_SUCCESS": {
+            return {
+                ...state,
+                soilData: action.payload,
+                busy: false
+            }
+        }
+        case "SOIL_DATA_RETRIEVAL_FAILED": {
+            return {
+                ...state,
+                busy: false
+            }
+        }
+        case "UVI_DATA_RETRIEVAL_SUCCESS": {
+            return {
+                ...state,
+                uviData: action.payload,
+                busy: false
+            }
+        }
+        case "UVI_DATA_RETRIEVAL_FAILED": {
+            return {
+                ...state,
+                busy: false
+            }
+        }
+        case "SATELLITE_IMAGERY_RETRIEVAL_SUCCESS": {
+            return {
+                ...state,
+                satelliteImagery: action.payload,
+                busy: false
+            }
+        }
+        case "SATELLITE_IMAGERY_RETRIEVAL_FAILED": {
+            return {
+                ...state,
+                busy: false
+            }
+        }
         default:
             return state;
     }

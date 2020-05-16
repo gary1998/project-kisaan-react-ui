@@ -1,5 +1,5 @@
 const serverURL= "https://project-kisaan-graphql-server.herokuapp.com/graphql";
-const apiURL = "https://api.agromonitoring.com/agro/1.0/polygons";
+const agroAPIURL = "https://api.agromonitoring.com/agro/1.0";
 
 export const setBusy = async() => {
     return resp => {
@@ -272,9 +272,151 @@ export const deleteCrop = async(owner, cropId) => {
     }
 }
 
+export const currentWeather = async(fieldResId) => {
+    let id = idFromResId(fieldResId);
+    return currentWeather => {
+        fetch(`${agroAPIURL}/weather?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(async data => {
+            return data.json()
+        }).then(body => {
+            if(body){
+                currentWeather({
+                    type: "CURRENT_WEATHER_RETRIEVAL_SUCCESS",
+                    payload: body
+                });
+            } else {
+                currentWeather({
+                    type: "CURRENT_WEATHER_RETRIEVAL_FAILED"
+                });
+            }
+        }).catch(err => {
+            console.log('error while retrieving current weather', err);
+        })
+    }
+}
+
+export const forecastWeather = async(fieldResId) => {
+    let id = idFromResId(fieldResId);
+    return forecastWeather => {
+        fetch(`${agroAPIURL}/weather/forecast?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(async data => {
+            return data.json()
+        }).then(body => {
+            if(body){
+                forecastWeather({
+                    type: "FORECAST_WEATHER_RETRIEVAL_SUCCESS",
+                    payload: body
+                });
+            } else {
+                forecastWeather({
+                    type: "FORECAST_WEATHER_RETRIEVAL_FAILED"
+                });
+            }
+        }).catch(err => {
+            console.log('error while retrieving forecast weather', err);
+        })
+    }
+}
+
+export const soilData = async(fieldResId) => {
+    let id = idFromResId(fieldResId);
+    return soilData => {
+        fetch(`${agroAPIURL}/soil?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(async data => {
+            return data.json()
+        }).then(body => {
+            if(body){
+                soilData({
+                    type: "SOIL_DATA_RETRIEVAL_SUCCESS",
+                    payload: body
+                });
+            } else {
+                soilData({
+                    type: "SOIL_DATA_RETRIEVAL_FAILED"
+                });
+            }
+        }).catch(err => {
+            console.log('error while retrieving forecast weather', err);
+        })
+    }
+}
+
+export const uviData = async(fieldResId) => {
+    let id = idFromResId(fieldResId);
+    return uviData => {
+        fetch(`${agroAPIURL}/uvi?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(async data => {
+            return data.json()
+        }).then(body => {
+            if(body){
+                uviData({
+                    type: "UVI_DATA_RETRIEVAL_SUCCESS",
+                    payload: body
+                });
+            } else {
+                uviData({
+                    type: "UVI_DATA_RETRIEVAL_FAILED"
+                });
+            }
+        }).catch(err => {
+            console.log('error while retrieving forecast weather', err);
+        })
+    }
+}
+
+export const satelliteImagery = async(start, end, fieldResId) => {
+    let id = idFromResId(fieldResId);
+    return satelliteImagery => {
+        fetch(`${agroAPIURL}/image/search?polyid=${id}&start=${start}&end=${end}&appid=83e9d92cb19c29c0045da2e0282321f5`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(async data => {
+            if(data.ok){
+                return data.json()
+            } else {
+                console.log('error while retrieving satellite imagery', data.statusText);
+                satelliteImagery({
+                    type: "SATELLITE_IMAGERY_RETRIEVAL_FAILED"
+                });
+            }
+        }).then(body => {
+            if(body){
+                satelliteImagery({
+                    type: "SATELLITE_IMAGERY_RETRIEVAL_SUCCESS",
+                    payload: body
+                });
+            } else {
+                satelliteImagery({
+                    type: "SATELLITE_IMAGERY_RETRIEVAL_FAILED"
+                });
+            }
+        }).catch(err => {
+            console.log('error while retrieving satellite imagery', err);
+        });
+    }
+}
+
 const addFieldToAgro = (fieldData) => {
     return new Promise((resolve, reject) => {
-        fetch(`${apiURL}?appid=83e9d92cb19c29c0045da2e0282321f5`, {
+        fetch(`${agroAPIURL}/polygons?appid=83e9d92cb19c29c0045da2e0282321f5`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -295,16 +437,21 @@ const addFieldToAgro = (fieldData) => {
 
 const deleteFieldFromAgro = (fieldId) => {
     return new Promise((resolve, reject) => {
-        fetch(`${apiURL}/${fieldId}?appid=83e9d92cb19c29c0045da2e0282321f5`, {
+        fetch(`${agroAPIURL}/polygons/${fieldId}?appid=83e9d92cb19c29c0045da2e0282321f5`, {
             method: 'DELETE'
         }).then(data => {
             if(data.ok){
                 resolve()
             } else {
-                alert(data.response);
                 console.log('error while deleting field from agro', data.statusText);
                 reject(data.statusText);
             }
         })
     })
+}
+
+const idFromResId = (resId) => {
+    let seperator = resId.lastIndexOf(":");
+    let id = resId.substring(seperator+1);
+    return id;
 }

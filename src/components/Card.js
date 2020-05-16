@@ -6,10 +6,21 @@ import {
 export default class Card extends React.Component {
     render(){
         return(
-            <Tile>
-                <Tile>{this.props.icon}&nbsp;{this.props.header}</Tile>
-                <Tile>{this.props.children}</Tile>
-                <Tile>{this.props.footer}</Tile>
+            <Tile className="card">
+                <Tile light className="card-header">
+                    <div>
+                        <h3 className="inline">
+                            { this.props.heading }
+                        </h3>
+                        <span className="inline card-icon">
+                            { this.props.icon }
+                        </span>
+                    </div>
+                    <div className=" inline bx--form__helper-text">{ this.props.subtitle }</div>
+                </Tile>
+                <Tile light className="card-body">
+                    { this.props.children }
+                </Tile>
             </Tile>
         )
     }

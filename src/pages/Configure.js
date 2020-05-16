@@ -278,7 +278,6 @@ const mapStateToProps = (state) =>{
         user: state.user,
         fields: state.fields,
         crops: state.crops,
-        last: state.last,
         busy: state.busy,
         location: state.location
     }
