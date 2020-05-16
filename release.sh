@@ -14,5 +14,5 @@ echo -e "${GREEN}Pushing to GitHub...${NC}"
 git push -u origin master
 printf '%20s\n' | tr ' ' -
 echo -e "${GREEN}Deploying to GitHub Pages...${NC}"
-npm run dpeloy
+npm run deploy
 printf '%20s\n' | tr ' ' -
