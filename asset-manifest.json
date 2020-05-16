@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/project-kisaan-react-ui/static/css/main.71389443.chunk.css",
-    "main.js": "/project-kisaan-react-ui/static/js/main.de89cf23.chunk.js",
-    "main.js.map": "/project-kisaan-react-ui/static/js/main.de89cf23.chunk.js.map",
+    "main.css": "/project-kisaan-react-ui/static/css/main.3068f5b6.chunk.css",
+    "main.js": "/project-kisaan-react-ui/static/js/main.b9dccdfe.chunk.js",
+    "main.js.map": "/project-kisaan-react-ui/static/js/main.b9dccdfe.chunk.js.map",
     "runtime-main.js": "/project-kisaan-react-ui/static/js/runtime-main.43278508.js",
     "runtime-main.js.map": "/project-kisaan-react-ui/static/js/runtime-main.43278508.js.map",
     "static/css/2.ce22b50a.chunk.css": "/project-kisaan-react-ui/static/css/2.ce22b50a.chunk.css",
-    "static/js/2.ebb646c2.chunk.js": "/project-kisaan-react-ui/static/js/2.ebb646c2.chunk.js",
-    "static/js/2.ebb646c2.chunk.js.map": "/project-kisaan-react-ui/static/js/2.ebb646c2.chunk.js.map",
+    "static/js/2.e84dc326.chunk.js": "/project-kisaan-react-ui/static/js/2.e84dc326.chunk.js",
+    "static/js/2.e84dc326.chunk.js.map": "/project-kisaan-react-ui/static/js/2.e84dc326.chunk.js.map",
     "index.html": "/project-kisaan-react-ui/index.html",
-    "precache-manifest.d0de3003bfd55f6b05332b847b0969c1.js": "/project-kisaan-react-ui/precache-manifest.d0de3003bfd55f6b05332b847b0969c1.js",
+    "precache-manifest.1bdd65e530dd42e9d6f7c81c7b87abe9.js": "/project-kisaan-react-ui/precache-manifest.1bdd65e530dd42e9d6f7c81c7b87abe9.js",
     "service-worker.js": "/project-kisaan-react-ui/service-worker.js",
     "static/css/2.ce22b50a.chunk.css.map": "/project-kisaan-react-ui/static/css/2.ce22b50a.chunk.css.map",
-    "static/css/main.71389443.chunk.css.map": "/project-kisaan-react-ui/static/css/main.71389443.chunk.css.map",
-    "static/js/2.ebb646c2.chunk.js.LICENSE.txt": "/project-kisaan-react-ui/static/js/2.ebb646c2.chunk.js.LICENSE.txt"
+    "static/css/main.3068f5b6.chunk.css.map": "/project-kisaan-react-ui/static/css/main.3068f5b6.chunk.css.map",
+    "static/js/2.e84dc326.chunk.js.LICENSE.txt": "/project-kisaan-react-ui/static/js/2.e84dc326.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.43278508.js",
     "static/css/2.ce22b50a.chunk.css",
-    "static/js/2.ebb646c2.chunk.js",
-    "static/css/main.71389443.chunk.css",
-    "static/js/main.de89cf23.chunk.js"
+    "static/js/2.e84dc326.chunk.js",
+    "static/css/main.3068f5b6.chunk.css",
+    "static/js/main.b9dccdfe.chunk.js"
   ]
 }
