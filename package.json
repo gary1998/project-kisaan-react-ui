@@ -10,7 +10,6 @@
     "pigeon-maps": "^0.15.0",
     "pigeon-marker": "^0.3.4",
     "pigeon-overlay": "^0.2.3",
-    "purecss": "^1.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",

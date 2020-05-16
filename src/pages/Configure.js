@@ -8,10 +8,9 @@ import {
     Select,
     SelectItem,
     Form,
-    FormGroup,
     Loading
 } from 'carbon-components-react'; 
-import { getFields, getCrops, newCrop, newField, deleteField, deleteCrop, setBusy } from '../Actions';
+import { getLocation, getFields, getCrops, newCrop, newField, deleteField, deleteCrop, setBusy } from '../Actions';
 import { connect } from 'react-redux';
 import Map from 'pigeon-maps';
 import TrashCan20 from "@carbon/icons-react/lib/trash-can/20";
@@ -36,6 +35,8 @@ class Configure extends React.Component{
 
     constructor(props){
         super(props);
+        this.props.retrieveLocation();
+        console.log(this.props.location);
         this.props.retrieveCrops(this.props.user.email);
         this.props.retrieveFields(this.props.user.email);
     }
@@ -118,7 +119,7 @@ class Configure extends React.Component{
                 <br/>
                 <Row>
                     <Column sm={4} lg={6} style={{textAlign: 'center'}}>
-                        <Map center={[28.946755, 77.726754]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['wikimedia']} />
+                        <Map center={this.props.location} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['wikimedia']} />
                         <div className="bx--form__helper-text" style={{maxWidth: '100%'}}>
                             Zoom to your fields (1 Ha to 3000 Ha) and click on button below.
                         </div>
@@ -189,31 +190,30 @@ class Configure extends React.Component{
                 <br/>
                 <Row>
                     <Column sm={4} lg={6}>
-                    <Form>
-                        <FormGroup>
-                        <Select
-                            helperText="Select crop to add"
-                            labelText="Crop"
-                            inline={false}
-                            defaultValue={this.state.selectedCrop}
-                            onChange={this._handleChangeCropSelection}
-                        >
-                            {
-                                cropsDetails.map(crop => {
-                                    return(
-                                        <SelectItem text={crop.name} value={crop.cropId} />
-                                    )
-                                })
-                            }
-                        </Select>
-                        <br />
-                        <Button
-                            renderIcon={Add20}
-                            onClick={this._handleAddCrop}
-                        >
-                            Add
-                        </Button>
-                        </FormGroup>
+                        <Form>
+                            <Select
+                                id="crop-selector"
+                                helperText="Select crop to add"
+                                labelText="Crop"
+                                inline={false}
+                                defaultValue={this.state.selectedCrop}
+                                onChange={this._handleChangeCropSelection}
+                            >
+                                {
+                                    cropsDetails.map(crop => {
+                                        return(
+                                            <SelectItem key={crop.cropId} text={crop.name} value={crop.cropId} />
+                                        )
+                                    })
+                                }
+                            </Select>
+                            <br />
+                            <Button
+                                renderIcon={Add20}
+                                onClick={this._handleAddCrop}
+                            >
+                                Add
+                            </Button>
                         </Form>
                     </Column>
                     <Column sm={4} lg={6}>
@@ -279,7 +279,8 @@ const mapStateToProps = (state) =>{
         fields: state.fields,
         crops: state.crops,
         last: state.last,
-        busy: state.busy
+        busy: state.busy,
+        location: state.location
     }
 }
 
@@ -308,6 +309,10 @@ const mapDispatchToProps = (dispatch) => {
         retrieveFields: async(email) => {
             dispatch(await setBusy());
             dispatch(await getFields(email));
+        },
+        retrieveLocation: async() => {
+            dispatch(await setBusy());
+            dispatch(await getLocation());
         }
     }
 }

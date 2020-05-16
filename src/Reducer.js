@@ -6,8 +6,22 @@ export const reducer = (state, action) => {
                 busy: true
             }
         }
+        case "LOCATION_RETRIEVED": {
+            return {
+                ...state,
+                location: action.payload,
+                busy: false
+            }
+        }
+        case "LOCATION_NOT_RETRIEVED": {
+            console.log('Error while retrieving GeoLocation.');
+            return {
+                ...state,
+                busy: false
+            }
+        }
         case "LOGIN_FAILED": {
-            alert('No such user found. Check your email and password again.');
+            console.log('No such user found. Check your email and password again.');
             return {
                 ...state,
                 busy: false,

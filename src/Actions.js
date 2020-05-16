@@ -9,6 +9,24 @@ export const setBusy = async() => {
     }
 }
 
+export const getLocation = async() => {
+    return location => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(position => {
+                location({
+                    type: "LOCATION_RETRIEVED",
+                    payload: [position.coords.latitude, position.coords.longitude]
+                });
+            });
+        } else {
+            console.log("GeoLocation not supported");
+            location({
+                type: "LOCATION_NOT_RETRIEVED"
+            })
+        }
+    }
+}
+
 export const loginUser = async(email, password) => {
     let query = `query login($email: String, $password: String){login(email: $email, password: $password){name photo email}}`;
     let variables = { email, password };
