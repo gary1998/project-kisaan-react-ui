@@ -137,6 +137,12 @@ export const reducer = (state, action) => {
                 busy: false
             }
         }
+        case "FIELD_DETAILS_RETRIEVAL_FAILED": {
+            return {
+                ...state,
+                busy: false
+            }
+        }
         default:
             return state;
     }

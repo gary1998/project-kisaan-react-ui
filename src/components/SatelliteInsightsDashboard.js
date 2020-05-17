@@ -33,8 +33,9 @@ class SatelliteInsightsDashboard extends React.Component {
     }
 
     _onFieldChange = async(e) => {
-        this.setState({selectedField: e.target.value});
-        await this._setEnvironment();
+        this.setState({selectedField: e.target.value}, async() => {
+            await this._setEnvironment();
+        });
     }
 
     _onForecastWeatherSliderChange = (e) => {

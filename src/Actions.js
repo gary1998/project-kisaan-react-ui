@@ -277,19 +277,26 @@ export const getFieldDetails = async(fieldResId) => {
         let data = {}
         Promise.all(
             [
-                getWeatherDataFromAgro(fieldResId).then(body => {data.weatherData = body}),
-                getForecastWeatherDataFromAgro(fieldResId).then(body => {data.forecastWeatherData = body}),
-                getSoilDataFromAgro(fieldResId).then(body => {data.soilData = body}),
-                getUVIDataFromAgro(fieldResId).then(body => {data.uviData = body}),
-                getSatelliteImageryFromAgro(fieldResId).then(body => {data.satelliteImageryData = body})
+                getWeatherDataFromAgro(fieldResId).then(body => {data.weatherData = body}).catch(catchError),
+                getForecastWeatherDataFromAgro(fieldResId).then(body => {data.forecastWeatherData = body}).catch(catchError),
+                getSoilDataFromAgro(fieldResId).then(body => {data.soilData = body}).catch(catchError),
+                getUVIDataFromAgro(fieldResId).then(body => {data.uviData = body}).catch(catchError),
+                getSatelliteImageryFromAgro(fieldResId).then(body => {data.satelliteImageryData = body}).catch(catchError)
             ]
         ).then(() => {
             return details({
                 type: "FIELD_DETAILS_RETRIEVAL_SUCCESS",
                 payload: data
             });
-        })
+        }).catch(catchError);
     }
+}
+
+const catchError = (err) => {
+    console.log('error occurred while retrieving field data from agro', err);
+    return {
+        type: "FIELD_DETAILS_RETRIEVAL_FAILED"
+    };
 }
 
 const getWeatherDataFromAgro = (fieldResId) => {
