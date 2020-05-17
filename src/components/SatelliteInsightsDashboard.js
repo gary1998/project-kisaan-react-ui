@@ -51,7 +51,7 @@ class SatelliteInsightsDashboard extends React.Component {
                 <Content style={{backgroundColor: '#f4f4f4'}}>
                     <Row>
                         <Column>
-                        <Card heading="Current Weather" icon={<img src={`http://openweathermap.org/img/w/${this.props.fieldData.weatherData.weather[0].icon}.png`} alt={this.props.fieldData.weatherData.weather.icon} />} subtitle={new Date(this.props.fieldData.weatherData.dt*1000).toLocaleString()}>
+                        <Card heading="Current Weather" icon={<img src={`https://openweathermap.org/img/w/${this.props.fieldData.weatherData.weather[0].icon}.png`} alt={this.props.fieldData.weatherData.weather.icon} />} subtitle={new Date(this.props.fieldData.weatherData.dt*1000).toLocaleString()}>
                             <div className="card-body">
                                 <strong className="card-body-head">Temperature</strong>
                                 <span className="card-body-value">{this.props.fieldData.weatherData.main.temp}&deg;C</span>
@@ -147,7 +147,7 @@ class SatelliteInsightsDashboard extends React.Component {
                     <br />
                     <Row>
                         <Column>
-                            <Card heading="Weather Forecast" icon={<img src={`http://openweathermap.org/img/w/${this.props.fieldData.forecastWeatherData[this.state.forecastWeatherSlider-1].weather[0].icon}.png`} alt={this.props.fieldData.forecastWeatherData[this.state.forecastWeatherSlider-1].icon} />} subtitle={new Date(this.props.fieldData.forecastWeatherData[this.state.forecastWeatherSlider-1].dt*1000).toLocaleString()}>
+                            <Card heading="Weather Forecast" icon={<img src={`https://openweathermap.org/img/w/${this.props.fieldData.forecastWeatherData[this.state.forecastWeatherSlider-1].weather[0].icon}.png`} alt={this.props.fieldData.forecastWeatherData[this.state.forecastWeatherSlider-1].icon} />} subtitle={new Date(this.props.fieldData.forecastWeatherData[this.state.forecastWeatherSlider-1].dt*1000).toLocaleString()}>
                                 <div className="card-body">
                                     <Slider id="slider" inputType="number" labelText="Slide for changing data" max={40} min={1} step={1} onChange={this._onForecastWeatherSliderChange} value={this.state.forecastWeatherSlider} />
                                 </div>
