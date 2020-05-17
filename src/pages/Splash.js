@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
     Button, Modal, TextInput, Loading
 } from 'carbon-components-react';
-import { Login20 } from '@carbon/icons-react';
+import { Login20, Information20 } from '@carbon/icons-react';
 class Splash extends React.Component {
     state = {
         email: "",
@@ -76,7 +76,7 @@ class Splash extends React.Component {
                     </>:
                     <>
                         <div>
-                            <Button href="#faq">More Information</Button>
+                            <Button href="#faq" renderIcon={Information20}>More Information</Button>
                         </div>
                         <br/>
                         <div className="bx--form__helper-text" style={{maxWidth: '100%'}}>
