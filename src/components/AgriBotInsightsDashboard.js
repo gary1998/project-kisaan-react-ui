@@ -1,7 +1,6 @@
 import React from 'react';
 import FieldSelector from './FieldSelector';
 import { connect } from 'react-redux';
-import Card from './Card';
 
 class AgriBotInsightsDashboard extends React.Component {
     state = {
