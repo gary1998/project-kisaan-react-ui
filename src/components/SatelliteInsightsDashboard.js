@@ -5,7 +5,8 @@ import {
     Row, 
     Column,
     Content,
-    Slider
+    Slider,
+    Loading
 } from 'carbon-components-react';
 import Card from './Card';
 import { 
@@ -51,6 +52,7 @@ class SatelliteInsightsDashboard extends React.Component {
     render(){
         return(
             <>
+                {this.props.busy?<Loading withOverlay={true} active={this.props.busy}/>:<></>}
                 <FieldSelector selectedField={this.state.selectedField} onFieldChange={this._onFieldChange}/>
                 <br/>
                 <Content style={{backgroundColor: '#f4f4f4'}}>
@@ -154,7 +156,7 @@ class SatelliteInsightsDashboard extends React.Component {
                         <Column>
                             <Card heading="Weather Forecast" icon={<img src={`http://openweathermap.org/img/w/${this.props.forecastWeather[this.state.forecastWeatherSlider-1].weather[0].icon}.png`} alt={this.props.forecastWeather[this.state.forecastWeatherSlider-1].icon} />} subtitle={new Date(this.props.forecastWeather[this.state.forecastWeatherSlider-1].dt*1000).toLocaleString()}>
                                 <div className="card-body">
-                                    <Slider id="slider" inputType="number" labelText="Slide for changing data" max={40} min={1} step={1} onChange={this._onForecastWeatherSliderChange} value={this.state.forecastWeatherSlider-1} />
+                                    <Slider id="slider" inputType="number" labelText="Slide for changing data" max={40} min={1} step={1} onChange={this._onForecastWeatherSliderChange} value={this.state.forecastWeatherSlider} />
                                 </div>
                                 <div className="card-body">
                                     <strong className="card-body-head">Temperature</strong>

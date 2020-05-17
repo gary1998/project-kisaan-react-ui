@@ -36,7 +36,6 @@ class Configure extends React.Component{
     constructor(props){
         super(props);
         this.props.retrieveLocation();
-        console.log(this.props.location);
         this.props.retrieveCrops(this.props.user.email);
         this.props.retrieveFields(this.props.user.email);
     }
