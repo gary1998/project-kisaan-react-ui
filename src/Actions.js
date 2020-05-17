@@ -272,146 +272,129 @@ export const deleteCrop = async(owner, cropId) => {
     }
 }
 
-export const currentWeather = async(fieldResId) => {
+export const getFieldDetails = async(fieldResId) => {
+    return details => {
+        let data = {}
+        Promise.all(
+            [
+                getWeatherDataFromAgro(fieldResId).then(body => {data.weatherData = body}),
+                getForecastWeatherDataFromAgro(fieldResId).then(body => {data.forecastWeatherData = body}),
+                getSoilDataFromAgro(fieldResId).then(body => {data.soilData = body}),
+                getUVIDataFromAgro(fieldResId).then(body => {data.uviData = body}),
+                getSatelliteImageryFromAgro(fieldResId).then(body => {data.satelliteImageryData = body})
+            ]
+        ).then(() => {
+            return details({
+                type: "FIELD_DETAILS_RETRIEVAL_SUCCESS",
+                payload: data
+            });
+        })
+    }
+}
+
+const getWeatherDataFromAgro = (fieldResId) => {
     let id = idFromResId(fieldResId);
-    return currentWeather => {
+    return new Promise((resolve, reject) => {
         fetch(`${agroAPIURL}/weather?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(async data => {
-            return data.json()
-        }).then(body => {
-            if(body){
-                currentWeather({
-                    type: "CURRENT_WEATHER_RETRIEVAL_SUCCESS",
-                    payload: body
-                });
+            if(data.ok){
+                return data.json();
             } else {
-                currentWeather({
-                    type: "CURRENT_WEATHER_RETRIEVAL_FAILED"
-                });
+                console.log('error while retreiving weather data from agro', data.statusText);
+                reject(data.statusText);
             }
-        }).catch(err => {
-            console.log('error while retrieving current weather', err);
-        })
-    }
+        }).then(body => {
+            resolve(body);
+        });
+    })
 }
 
-export const forecastWeather = async(fieldResId) => {
+const getForecastWeatherDataFromAgro = (fieldResId) => {
     let id = idFromResId(fieldResId);
-    return forecastWeather => {
+    return new Promise((resolve, reject) => {
         fetch(`${agroAPIURL}/weather/forecast?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(async data => {
-            return data.json()
-        }).then(body => {
-            if(body){
-                forecastWeather({
-                    type: "FORECAST_WEATHER_RETRIEVAL_SUCCESS",
-                    payload: body
-                });
+            if(data.ok){
+                return data.json();
             } else {
-                forecastWeather({
-                    type: "FORECAST_WEATHER_RETRIEVAL_FAILED"
-                });
+                console.log('error while retreiving forecast weather data from agro', data.statusText);
+                reject(data.statusText);
             }
-        }).catch(err => {
-            console.log('error while retrieving forecast weather', err);
-        })
-    }
+        }).then(body => {
+            resolve(body);
+        });
+    });
 }
 
-export const soilData = async(fieldResId) => {
+const getSoilDataFromAgro = (fieldResId) => {
     let id = idFromResId(fieldResId);
-    return soilData => {
+    return new Promise((resolve, reject) => {
         fetch(`${agroAPIURL}/soil?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(async data => {
-            return data.json()
-        }).then(body => {
-            if(body){
-                soilData({
-                    type: "SOIL_DATA_RETRIEVAL_SUCCESS",
-                    payload: body
-                });
+            if(data.ok){
+                return data.json();
             } else {
-                soilData({
-                    type: "SOIL_DATA_RETRIEVAL_FAILED"
-                });
+                console.log('error while retreiving soil data from agro', data.statusText);
+                reject(data.statusText);
             }
-        }).catch(err => {
-            console.log('error while retrieving forecast weather', err);
-        })
-    }
+        }).then(body => {
+            resolve(body);
+        });
+    });
 }
 
-export const uviData = async(fieldResId) => {
+const getUVIDataFromAgro = (fieldResId) => {
     let id = idFromResId(fieldResId);
-    return uviData => {
+    return new Promise((resolve, reject) => {
         fetch(`${agroAPIURL}/uvi?polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(async data => {
-            return data.json()
-        }).then(body => {
-            if(body){
-                uviData({
-                    type: "UVI_DATA_RETRIEVAL_SUCCESS",
-                    payload: body
-                });
+            if(data.ok){
+                return data.json();
             } else {
-                uviData({
-                    type: "UVI_DATA_RETRIEVAL_FAILED"
-                });
+                console.log('error while retreiving uvi data from agro', data.statusText);
+                reject(data.statusText);
             }
-        }).catch(err => {
-            console.log('error while retrieving forecast weather', err);
-        })
-    }
+        }).then(body => {
+            resolve(body);
+        });
+    });
 }
 
-export const satelliteImagery = async(start, end, fieldResId) => {
+const getSatelliteImageryFromAgro = (fieldResId) => {
     let id = idFromResId(fieldResId);
-    return satelliteImagery => {
-        fetch(`${agroAPIURL}/image/search?polyid=${id}&start=${start}&end=${end}&appid=83e9d92cb19c29c0045da2e0282321f5`, {
+    return new Promise((resolve, reject) => {
+        fetch(`${agroAPIURL}/image/search?start=0&end=1&polyid=${id}&appid=83e9d92cb19c29c0045da2e0282321f5&units=metric`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(async data => {
             if(data.ok){
-                return data.json()
+                return data.json();
             } else {
-                console.log('error while retrieving satellite imagery', data.statusText);
-                satelliteImagery({
-                    type: "SATELLITE_IMAGERY_RETRIEVAL_FAILED"
-                });
+                console.log('error while retreiving satellite imagery from agro', data.statusText);
+                reject(data.statusText);
             }
         }).then(body => {
-            if(body){
-                satelliteImagery({
-                    type: "SATELLITE_IMAGERY_RETRIEVAL_SUCCESS",
-                    payload: body
-                });
-            } else {
-                satelliteImagery({
-                    type: "SATELLITE_IMAGERY_RETRIEVAL_FAILED"
-                });
-            }
-        }).catch(err => {
-            console.log('error while retrieving satellite imagery', err);
+            resolve(body);
         });
-    }
+    });
 }
 
 const addFieldToAgro = (fieldData) => {
