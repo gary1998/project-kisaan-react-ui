@@ -99,7 +99,7 @@ class SatelliteInsightsDashboard extends React.Component {
                         </Card>
                         </Column>
                         <Column>
-                            <Card heading="Satellite Imagery" icon={<Image32 />} subtitle={new Date(this.props.fieldData.satelliteImageryData[0].dt*1000).toLocaleString()+" by "+this.props.fieldData.satelliteImageryData[0].type}>
+                            <Card heading="Satellite Imagery" icon={<Image32 />} subtitle={new Date(this.props.fieldData.satelliteImageryData[this.props.fieldData.satelliteImageryData.length-1].dt*1000).toLocaleString()+" by "+this.props.fieldData.satelliteImageryData[this.props.fieldData.satelliteImageryData.length-1].type}>
                                 <div className="card-body">
                                     <img width="100%" src={this.props.fieldData.satelliteImageryData[this.props.fieldData.satelliteImageryData.length-1].image.truecolor} alt="satellite imagery"/>
                                 </div>
