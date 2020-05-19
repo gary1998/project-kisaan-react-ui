@@ -51,13 +51,14 @@ class SatelliteInsightsDashboard extends React.Component {
             <>
                 {
                     (!this.props.fields)?
-                    <Loading withOverlay={ true } active={!this.props.fields}/>:
+                    <Loading withOverlay={ true } description="Loading your fields..." active={!this.props.fields}/>:
                     <>
                         <FieldSelector selectedField={this.state.selectedField} onFieldChange={this._onFieldChange}/>
                         <br/>
                         {
-                            (!this.props.fieldData || this.props.busy)?
-                            <Loading withOverlay={ true } active={!this.props.fieldData || this.props.busy}/>:
+                            (!this.props.fieldData && !this.props.busy)?<></>:
+                            this.props.busy?
+                            <Loading withOverlay={ false } description="Loading relevant cards..." active={this.props.busy}/>:
                             <Content style={{backgroundColor: '#f4f4f4'}}>
                                 <Row>
                                     <Column>
@@ -124,6 +125,10 @@ class SatelliteInsightsDashboard extends React.Component {
                                             <div className="card-body">
                                                 <strong className="card-body-head">NDVI</strong>
                                                 <span className="card-body-value">{this.props.fieldData.satelliteImageryData.ndviStats.mean.toPrecision(2)}&nbsp;&nbsp;<svg height="10" width="10"><circle cx="50%" cy="50%" r="5" className={`anti-gradient_${this.props.fieldData.satelliteImageryData.ndviStats.mean.toPrecision(1)*10}`} /></svg></span>
+                                            </div>
+                                            <div className="card-body">
+                                                <strong className="card-body-head">EVI</strong>
+                                                <span className="card-body-value">{this.props.fieldData.satelliteImageryData.eviStats.mean.toPrecision(2)}&nbsp;&nbsp;<svg height="10" width="10"><circle cx="50%" cy="50%" r="5" className={`anti-gradient_${this.props.fieldData.satelliteImageryData.eviStats.mean.toPrecision(1)*10}`} /></svg></span>
                                             </div>
                                             <div className="bx--form__helper-text" style={{maxWidth: '100%'}}>
                                                 This card may take a bit to update, please be patient.

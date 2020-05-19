@@ -399,12 +399,13 @@ const getSatelliteImageryFromAgro = (fieldResId) => {
                 reject(data.statusText);
             }
         }).then(body => {
-            getNDVIStatsFromAgro(body[body.length-1].stats.ndvi).then(ndviStats => {
-                resolve({
-                    body,
-                    ndviStats
-                });
-            });
+            let response = {body};
+            Promise.all([
+                getNDVIStatsFromAgro(body[body.length-1].stats.ndvi).then(ndviStats => {response.ndviStats = ndviStats}).catch(catchError),
+                getEVIStatsFromAgro(body[body.length-1].stats.evi).then(eviStats => {response.eviStats = eviStats}).catch(catchError)
+            ]).then(() => {
+                resolve(response);
+            }).catch(catchError);
         });
     });
 }
@@ -421,6 +422,26 @@ const getNDVIStatsFromAgro = (url) => {
                 return data.json();
             } else {
                 console.log('error while retreiving ndvi stats from agro', data.statusText);
+                reject(data.statusText);
+            }
+        }).then(body => {
+            resolve(body);
+        });
+    });
+}
+
+const getEVIStatsFromAgro = (url) => {
+    return new Promise((resolve, reject) => {
+        fetch(`${url}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(async data => {
+            if(data.ok){
+                return data.json();
+            } else {
+                console.log('error while retreiving evi stats from agro', data.statusText);
                 reject(data.statusText);
             }
         }).then(body => {
