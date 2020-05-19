@@ -110,7 +110,11 @@ class Configure extends React.Component{
 
     render(){
         return(
-            <Grid>
+            <>
+            {
+                (!this.props.fields || !this.props.crops || !this.props.location)?
+                <Loading withOverlay={true} active={!this.props.fields || !this.props.crops || !this.props.location}/>:
+                <Grid>
                 {this.props.busy?<Loading withOverlay={true} active={this.props.busy}/>:<></>}
                 <Row>
                     <h2 style={{width: '100%', textAlign: 'center'}}>Fields Section</h2>
@@ -172,7 +176,7 @@ class Configure extends React.Component{
                                             )
                                         }):
                                         <TableRow>
-                                            <TableCell colspan={3}>
+                                            <TableCell colSpan={3}>
                                                 No fields yet
                                             </TableCell>
                                         </TableRow>
@@ -257,7 +261,7 @@ class Configure extends React.Component{
                                             )
                                         }):
                                         <TableRow>
-                                            <TableCell colspan={3}>
+                                            <TableCell colSpan={3}>
                                                 No crops yet
                                             </TableCell>
                                         </TableRow>
@@ -268,6 +272,8 @@ class Configure extends React.Component{
                     </Column>
                 </Row>
             </Grid>
+            }
+            </>
         )
     }
 }

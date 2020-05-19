@@ -399,6 +399,31 @@ const getSatelliteImageryFromAgro = (fieldResId) => {
                 reject(data.statusText);
             }
         }).then(body => {
+            getNDVIStatsFromAgro(body[body.length-1].stats.ndvi).then(ndviStats => {
+                resolve({
+                    body,
+                    ndviStats
+                });
+            });
+        });
+    });
+}
+
+const getNDVIStatsFromAgro = (url) => {
+    return new Promise((resolve, reject) => {
+        fetch(`${url}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(async data => {
+            if(data.ok){
+                return data.json();
+            } else {
+                console.log('error while retreiving ndvi stats from agro', data.statusText);
+                reject(data.statusText);
+            }
+        }).then(body => {
             resolve(body);
         });
     });
