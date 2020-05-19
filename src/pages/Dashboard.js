@@ -3,7 +3,6 @@ import {
     Row, 
     ContentSwitcher,
     Switch,
-    Content,
     Grid
 } from 'carbon-components-react';
 import AgriBotInsightsDashboard from '../components/AgriBotInsightsDashboard';
