@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0a005bd4e938b58bdfbb48ab15cf8a2d",
+    "revision": "2e07b91d93cb3d536f9340629c989a2a",
     "url": "/project-kisaan-react-ui/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/project-kisaan-react-ui/static/css/2.ce22b50a.chunk.css"
   },
   {
-    "revision": "a85f85336c97f1019303",
+    "revision": "a9995d280a3074286010",
     "url": "/project-kisaan-react-ui/static/css/main.8d58bd98.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/project-kisaan-react-ui/static/js/2.46b8a243.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a85f85336c97f1019303",
-    "url": "/project-kisaan-react-ui/static/js/main.f3ca8c2b.chunk.js"
+    "revision": "a9995d280a3074286010",
+    "url": "/project-kisaan-react-ui/static/js/main.04e89a8c.chunk.js"
   },
   {
     "revision": "f7a41322017127a93b23",
