@@ -412,7 +412,7 @@ const getSatelliteImageryFromAgro = (fieldResId) => {
 
 const getNDVIStatsFromAgro = (url) => {
     return new Promise((resolve, reject) => {
-        fetch(`https://${url.substring(7)}`, {
+        fetch(`${url.replace("http://", "https://")}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -432,7 +432,7 @@ const getNDVIStatsFromAgro = (url) => {
 
 const getEVIStatsFromAgro = (url) => {
     return new Promise((resolve, reject) => {
-        fetch(`${url.substring(7)}`, {
+        fetch(`${url.replace("http://", "https://")}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
