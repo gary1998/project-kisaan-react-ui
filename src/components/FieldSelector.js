@@ -4,8 +4,7 @@ import {
     SelectItem,
     Row,
     Column,
-    Button,
-    Loading
+    Button
 } from 'carbon-components-react';
 import { connect } from 'react-redux';
 
@@ -29,7 +28,6 @@ class FieldSelector extends React.Component{
     render(){
         return(
             <Row>
-                {this.props.busy?<Loading withOverlay={true} active={this.props.busy}/>:<></>}
                 <Column>
                     <Button disabled kind="ghost" size="field">{this.state.datetime}</Button>
                 </Column>
@@ -53,8 +51,7 @@ class FieldSelector extends React.Component{
 
 const mapStateToProps = (state) =>{
     return {
-        fields: state.fields,
-        busy: state.busy,
+        fields: state.fields
     }
 }
 

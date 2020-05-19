@@ -4,7 +4,7 @@ import {
     ContentSwitcher,
     Switch,
     Content,
-    Loading
+    Grid
 } from 'carbon-components-react';
 import AgriBotInsightsDashboard from '../components/AgriBotInsightsDashboard';
 import SatelliteInsightsDashboard from '../components/SatelliteInsightsDashboard';
@@ -21,22 +21,21 @@ class Dashboard extends React.Component {
 
     render(){
         return(
-            <>
-                {this.props.busy?<Loading withOverlay={true} active={this.props.busy}/>:<></>}
+            <Grid>
                 <Row>
                     <ContentSwitcher selectedIndex={0} onChange={this._handleContentChange}>
                         <Switch name="satelliteInsights" text="&nbsp;Satellite" />
                         <Switch name="agriBotInsights" text="&nbsp;AgriBot"/>
                     </ContentSwitcher>
                 </Row>
-                <Content>
+                <Grid>
                     {
                         this.state.selectedTab===0?
                         <SatelliteInsightsDashboard />:
                         <AgriBotInsightsDashboard />
                     }
-                </Content>
-            </>
+                </Grid>
+            </Grid>
         )
     }
 }
