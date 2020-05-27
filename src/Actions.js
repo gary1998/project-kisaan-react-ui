@@ -402,7 +402,7 @@ const getSatelliteImageryFromAgro = (fieldResId) => {
             let response = {body};
             Promise.all([
                 getNDVIStatsFromAgro(body[body.length-1].stats.ndvi).then(ndviStats => {response.ndviStats = ndviStats}).catch(catchError),
-                getEVIStatsFromAgro(body[body.length-1].stats.evi).then(eviStats => {response.eviStats = eviStats}).catch(catchError)
+                getEVIStatsFromAgro(body[body.length-1].stats.evi2).then(eviStats => {response.eviStats = eviStats}).catch(catchError)
             ]).then(() => {
                 resolve(response);
             }).catch(catchError);

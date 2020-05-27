@@ -5,6 +5,8 @@ import {
     Switch,
     Grid
 } from 'carbon-components-react';
+import { setBusy, getFields } from '../Actions';
+import { connect } from 'react-redux';
 import AgriBotInsightsDashboard from '../components/AgriBotInsightsDashboard';
 import SatelliteInsightsDashboard from '../components/SatelliteInsightsDashboard';
 
@@ -14,29 +16,62 @@ class Dashboard extends React.Component {
         selectedTab: 0
     }
 
+    componentWillMount(){
+        this._setEnvironment();
+    }
+
+    _setEnvironment = async() => {
+        if(this.props.user){
+            await this.props.getFields(this.props.user.email);
+        }
+    }
+
     _handleContentChange = (e) => {
         this.setState({selectedTab: e.index})
     }
 
     render(){
         return(
-            <Grid>
-                <Row>
-                    <ContentSwitcher selectedIndex={0} onChange={this._handleContentChange}>
-                        <Switch name="satelliteInsights" text="&nbsp;Satellite" />
-                        <Switch name="agriBotInsights" text="&nbsp;AgriBot"/>
-                    </ContentSwitcher>
-                </Row>
-                <Grid>
-                    {
-                        this.state.selectedTab===0?
-                        <SatelliteInsightsDashboard />:
-                        <AgriBotInsightsDashboard />
-                    }
-                </Grid>
-            </Grid>
+            <>
+                {
+                    !this.props.user?<div>You're not logged in</div>:
+                    <Grid>
+                        <Row>
+                            <ContentSwitcher selectedIndex={0} onChange={this._handleContentChange}>
+                                <Switch name="satelliteInsights" text="&nbsp;Satellite" />
+                                <Switch name="agriBotInsights" text="&nbsp;AgriBot"/>
+                            </ContentSwitcher>
+                        </Row>
+                        <Grid>
+                            {
+                                this.state.selectedTab===0?
+                                <SatelliteInsightsDashboard />:
+                                <AgriBotInsightsDashboard />
+                            }
+                        </Grid>
+                    </Grid>
+                }
+            </>
         )
     }
 }
 
-export default Dashboard;
+const mapStateToProps = (state) =>{
+    return {
+        user: state.user,
+        fields: state.fields,
+        busy: state.busy
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getFields: async(email) => {
+            dispatch(await setBusy());
+            dispatch(await getFields(email));
+        }
+    }
+}
+
+
+export default connect (mapStateToProps, mapDispatchToProps) (Dashboard);

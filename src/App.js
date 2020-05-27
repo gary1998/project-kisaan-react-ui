@@ -9,11 +9,14 @@ import Configure from './pages/Configure';
 import Content from './components/Content';
 import './App.css';
 import { Route, HashRouter } from 'react-router-dom';
+import { Loading } from 'carbon-components-react';
+import { connect } from 'react-redux';
 
 class App extends React.Component {
   render(){
     return (
       <>
+        <Loading active={this.props.busy===true} description={"Working on it, please wait..."} withOverlay={true} small={false} />
         <AppLayout >
           <HashRouter>
             <Content>
@@ -32,4 +35,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function mapStateToProps(state){
+  return {
+    busy: state.busy
+  }
+}
+
+export default connect(mapStateToProps)(App);

@@ -14,7 +14,7 @@ class FieldSelector extends React.Component{
         datetimeupdater: ""
     }
 
-    componentDidMount(){
+    UNSAFE_componentWillMount = async() => {
         let updater = setInterval(() => {
             this.setState({datetime: new Date().toLocaleString()});
         }, 100);
@@ -34,13 +34,13 @@ class FieldSelector extends React.Component{
                 <Column>
                     <Select value={this.props.selectedField} onChange={this.props.onFieldChange} width={'xl'} id="agriBotDashboardfieldSelector" inline labelText="Select one field to get cards on dashboard">
                         {
-                            this.props.fields.map(field => {
+                            this.props.fields?this.props.fields.map(field => {
                                 let seperator = field.fieldResId.lastIndexOf(":");
                                 let id = field.fieldResId.substring(seperator+1);
                                 return(
                                     <SelectItem key={field.fieldResId} text={id} value={field.fieldResId} />
                                 )
-                            })
+                            }):<></>
                         }
                     </Select>
                 </Column>

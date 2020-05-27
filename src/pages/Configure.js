@@ -7,8 +7,7 @@ import {
     Button,
     Select,
     SelectItem,
-    Form,
-    Loading
+    Form
 } from 'carbon-components-react'; 
 import { getLocation, getFields, getCrops, newCrop, newField, deleteField, deleteCrop, setBusy } from '../Actions';
 import { connect } from 'react-redux';
@@ -33,34 +32,43 @@ class Configure extends React.Component{
         fieldName: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
     }
 
-    constructor(props){
-        super(props);
-        this.props.retrieveLocation();
-        this.props.retrieveCrops(this.props.user.email);
-        this.props.retrieveFields(this.props.user.email);
+    UNSAFE_componentWillMount = async() => {
+        if(this.props.user){
+            await this.props.retrieveLocation();
+            await this.props.retrieveCrops(this.props.user.email);
+            await this.props.retrieveFields(this.props.user.email);
+        }
     }
 
     _handleChangeCropSelection = (evt) => {
         this.setState({selectedCrop: evt.target.value});
     }
 
-    _handleAddCrop = async(evt) => {
-        let crop = cropsDetails.filter((crop) => {
-            return crop.cropId===this.state.selectedCrop;
-        });
-        await this.props.addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name);
+    _handleAddCrop = async() => {
+        if(this.props.user){
+            let crop = cropsDetails.filter((crop) => {
+                return crop.cropId===this.state.selectedCrop;
+            });
+            await this.props.addCrop(this.props.user.email, this.state.selectedCrop, crop[0].name);
+        }
     }
 
     _handleAddField = async() => {
-        await this.props.addField(this.props.user.email, this.state.fieldGeoJSON);
+        if(this.props.user){
+            await this.props.addField(this.props.user.email, this.state.fieldGeoJSON);
+        }
     }
 
     deleteField = async(fieldId) => {
-        await this.props.removeField(this.props.user.email, fieldId);
+        if(this.props.user){
+            await this.props.removeField(this.props.user.email, fieldId);
+        }
     }
 
     deleteCrop = async(cropId) => {
-        await this.props.removeCrop(this.props.user.email, cropId);
+        if(this.props.user){
+            await this.props.removeCrop(this.props.user.email, cropId);
+        }
     }
 
     provider = {
@@ -111,168 +119,167 @@ class Configure extends React.Component{
     render(){
         return(
             <>
-            {
-                (!this.props.fields || !this.props.crops || !this.props.location)?
-                <Loading withOverlay={true} active={!this.props.fields || !this.props.crops || !this.props.location}/>:
-                <Grid>
-                {this.props.busy?<Loading withOverlay={true} active={this.props.busy}/>:<></>}
-                <Row>
-                    <h2 style={{width: '100%', textAlign: 'center'}}>Fields Section</h2>
-                </Row>
-                <br/>
-                <Row>
-                    <Column sm={4} lg={6} style={{textAlign: 'center'}}>
-                        <Map center={this.props.location} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['wikimedia']} />
-                        <div className="bx--form__helper-text" style={{maxWidth: '100%'}}>
-                            Zoom to your fields (1 Ha to 3000 Ha) and click on button below.
-                        </div>
-                        <Button renderIcon={Add20} onClick={this._handleAddField}>
-                            Add
-                        </Button>
-                    </Column>
-                    <Column sm={4} lg={6}>
-                        <TableContainer title="Your Fields">
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableHeader key="fieldId">
-                                            Field Id
-                                        </TableHeader>
-                                        <TableHeader key="fieldLoc">
-                                            Field Location
-                                        </TableHeader>
-                                        <TableHeader key="delete">
+                {
+                    !this.props.user?
+                    <div>You're not logged in</div>:
+                    <Grid>
+                        <Row>
+                            <h2 style={{width: '100%', textAlign: 'center'}}>Fields Section</h2>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Column sm={4} lg={6} style={{textAlign: 'center'}}>
+                                <Map center={this.props.location} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['wikimedia']} />
+                                <div className="bx--form__helper-text" style={{maxWidth: '100%'}}>
+                                    Zoom to your fields (1 Ha to 3000 Ha) and click on button below.
+                                </div>
+                                <Button renderIcon={Add20} onClick={this._handleAddField}>
+                                    Add
+                                </Button>
+                            </Column>
+                            <Column sm={4} lg={6}>
+                                <TableContainer title="Your Fields">
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableHeader key="fieldId">
+                                                    Field Id
+                                                </TableHeader>
+                                                <TableHeader key="fieldLoc">
+                                                    Field Location
+                                                </TableHeader>
+                                                <TableHeader key="delete">
 
-                                        </TableHeader>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        this.props.fields.length?
-                                        this.props.fields.map(field => {
-                                            let seperator = field.fieldResId.lastIndexOf(":");
-                                            let id = field.fieldResId.substring(seperator+1);
-                                            let pt1 = field.data.geo_json.features[0].geometry.coordinates[0][0];
-                                            let pt2 = field.data.geo_json.features[0].geometry.coordinates[0][2];
-                                            return (
-                                            <TableRow key={field.fieldResId}>
-                                                <TableCell>
-                                                    {id}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {pt1[0]+"\n"+pt1[1]+"\n"+pt2[0]+"\n"+pt2[1]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Button 
-                                                        kind="ghost"
-                                                        tabIndex={0}
-                                                        hasonlyicon="true"
-                                                        renderIcon={TrashCan20}
-                                                        iconDescription="Delete"
-                                                        onClick={() => {this.deleteField(id)}}
-                                                    />
-                                                </TableCell>
+                                                </TableHeader>
                                             </TableRow>
-                                            )
-                                        }):
-                                        <TableRow>
-                                            <TableCell colSpan={3}>
-                                                No fields yet
-                                            </TableCell>
-                                        </TableRow>
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Column>
-                </Row>
-                <br/>
-                <Row>
-                    <h2 style={{width: '100%', textAlign: 'center'}}>Crops Section</h2>
-                </Row>
-                <br/>
-                <Row>
-                    <Column sm={4} lg={6}>
-                        <Form>
-                            <Select
-                                id="crop-selector"
-                                helperText="Select crop to add"
-                                labelText="Crop"
-                                inline={false}
-                                defaultValue={this.state.selectedCrop}
-                                onChange={this._handleChangeCropSelection}
-                            >
-                                {
-                                    cropsDetails.map(crop => {
-                                        return(
-                                            <SelectItem key={crop.cropId} text={crop.name} value={crop.cropId} />
-                                        )
-                                    })
-                                }
-                            </Select>
-                            <br />
-                            <Button
-                                renderIcon={Add20}
-                                onClick={this._handleAddCrop}
-                            >
-                                Add
-                            </Button>
-                        </Form>
-                    </Column>
-                    <Column sm={4} lg={6}>
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableHeader key="cropId">
-                                            Crop Id
-                                        </TableHeader>
-                                        <TableHeader key="cropName">
-                                            Crop Name
-                                        </TableHeader>
-                                        <TableHeader key="delete">
-
-                                        </TableHeader>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        this.props.crops.length?
-                                        this.props.crops.map(crop => {
-                                            return (
-                                                <TableRow key={crop.cropId}>
-                                                    <TableCell>
-                                                        {crop.cropId}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {crop.name}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Button
-                                                            kind="ghost"
-                                                            tabIndex={0}
-                                                            hasonlyicon="true"
-                                                            renderIcon={TrashCan20}
-                                                            iconDescription="Delete"
-                                                            onClick={() => {this.deleteCrop(crop.cropId)}}
-                                                        />
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                this.props.fields.length?
+                                                this.props.fields.map(field => {
+                                                    let seperator = field.fieldResId.lastIndexOf(":");
+                                                    let id = field.fieldResId.substring(seperator+1);
+                                                    let pt1 = field.data.geo_json.features[0].geometry.coordinates[0][0];
+                                                    let pt2 = field.data.geo_json.features[0].geometry.coordinates[0][2];
+                                                    return (
+                                                    <TableRow key={field.fieldResId}>
+                                                        <TableCell>
+                                                            {id}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {pt1[0]+"\n"+pt1[1]+"\n"+pt2[0]+"\n"+pt2[1]}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Button 
+                                                                kind="ghost"
+                                                                tabIndex={0}
+                                                                hasonlyicon="true"
+                                                                renderIcon={TrashCan20}
+                                                                iconDescription="Delete"
+                                                                onClick={() => {this.deleteField(id)}}
+                                                            />
+                                                        </TableCell>
+                                                    </TableRow>
+                                                    )
+                                                }):
+                                                <TableRow>
+                                                    <TableCell colSpan={3}>
+                                                        No fields yet
                                                     </TableCell>
                                                 </TableRow>
-                                            )
-                                        }):
-                                        <TableRow>
-                                            <TableCell colSpan={3}>
-                                                No crops yet
-                                            </TableCell>
-                                        </TableRow>
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Column>
-                </Row>
-            </Grid>
-            }
+                                            }
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Column>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <h2 style={{width: '100%', textAlign: 'center'}}>Crops Section</h2>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Column sm={4} lg={6}>
+                                <Form>
+                                    <Select
+                                        id="crop-selector"
+                                        helperText="Select crop to add"
+                                        labelText="Crop"
+                                        inline={false}
+                                        defaultValue={this.state.selectedCrop}
+                                        onChange={this._handleChangeCropSelection}
+                                    >
+                                        {
+                                            cropsDetails.map(crop => {
+                                                return(
+                                                    <SelectItem key={crop.cropId} text={crop.name} value={crop.cropId} />
+                                                )
+                                            })
+                                        }
+                                    </Select>
+                                    <br />
+                                    <Button
+                                        renderIcon={Add20}
+                                        onClick={this._handleAddCrop}
+                                    >
+                                        Add
+                                    </Button>
+                                </Form>
+                            </Column>
+                            <Column sm={4} lg={6}>
+                                <TableContainer>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableHeader key="cropId">
+                                                    Crop Id
+                                                </TableHeader>
+                                                <TableHeader key="cropName">
+                                                    Crop Name
+                                                </TableHeader>
+                                                <TableHeader key="delete">
+
+                                                </TableHeader>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                this.props.crops.length?
+                                                this.props.crops.map(crop => {
+                                                    return (
+                                                        <TableRow key={crop.cropId}>
+                                                            <TableCell>
+                                                                {crop.cropId}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {crop.name}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <Button
+                                                                    kind="ghost"
+                                                                    tabIndex={0}
+                                                                    hasonlyicon="true"
+                                                                    renderIcon={TrashCan20}
+                                                                    iconDescription="Delete"
+                                                                    onClick={() => {this.deleteCrop(crop.cropId)}}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                }):
+                                                <TableRow>
+                                                    <TableCell colSpan={3}>
+                                                        No crops yet
+                                                    </TableCell>
+                                                </TableRow>
+                                            }
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Column>
+                        </Row>
+                    </Grid>
+                }
             </>
         )
     }
