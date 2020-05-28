@@ -1,106 +1,165 @@
-export const reducer = (state, action) => {
-    switch(action.type) {
-        case "APP_BUSY": {
+import * as actionTypes from './constants';
+
+const reducer = (state, action) => {
+    switch(action.type){
+
+        // Request Actions
+        case actionTypes.LOGIN_REQUEST: {
             return {
                 ...state,
                 busy: true
             }
         }
-        case "LOCATION_RETRIEVED": {
+
+        case actionTypes.LOGOUT_REQUEST: {
             return {
                 ...state,
-                location: action.payload,
+                busy: true
+            }
+        }
+
+        case actionTypes.GEOLOCATION_RETRIEVAL_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.FIELDS_RETRIEVAL_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.CROPS_RETRIEVAL_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.ADD_FIELD_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.ADD_CROP_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.DELETE_FIELD_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.DELETE_CROP_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.SATELLITE_INSIGHTS_RETRIEVAL_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        case actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_REQUEST: {
+            return {
+                ...state,
+                busy: true
+            }
+        }
+
+        // Failure Actions
+        case (actionTypes.LOGIN_FAILURE || actionTypes.LOGOUT_FAILURE || actionTypes.GEOLOCATION_RETRIEVAL_FAILURE || actionTypes.FIELDS_RETRIEVAL_FAILURE || actionTypes.CROPS_RETRIEVAL_FAILURE || actionTypes.ADD_FIELD_FAILURE || actionTypes.DELETE_FIELD_FAILURE || actionTypes.ADD_CROP_FAILURE || actionTypes.DELETE_CROP_FAILURE || actionTypes.SATELLITE_INSIGHTS_RETRIEVAL_FAILURE || actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_FAILURE): {
+            console.log('error occurred:', action.error);
+            return {
+                ...state,
                 busy: false
             }
         }
-        case "LOCATION_NOT_RETRIEVED": {
-            console.log('Error while retrieving GeoLocation.');
+
+        // Success Actions
+        case actionTypes.LOGIN_SUCCESS: {
+            console.log('success:', action.message);
             return {
                 ...state,
-                busy: false
+                busy: false,
+                user: action.user
             }
         }
-        case "LOGIN_FAILED": {
-            console.log('No such user found. Check your email and password again.');
+
+        case actionTypes.LOGOUT_SUCCESS: {
+            console.log('success:', action.message);
             return {
                 ...state,
                 busy: false,
-                user: ""
-            };
-        }
-        case "LOGIN_SUCCESS": {
-            return {
-                ...state,
-                busy: false,
-                user: action.payload
+                user: undefined
             }
         }
-        case "LOGOUT": {
-            localStorage.setItem('projectkisaanstate', '');
-            window.location.href="#home";
+
+        case actionTypes.GEOLOCATION_RETRIEVAL_SUCCESS: {
+            console.log('success:', action.message);
             return {
                 ...state,
                 busy: false,
-                user: ""
-            };
-        }
-        case "FIELDS_RETRIEVAL_SUCCESS": {
-            return {
-                ...state,
-                busy: false,
-                fields: action.payload
+                geolocation: action.geolocation
             }
         }
-        case "FIELDS_RETRIEVAL_FAILED": {
-            return {
-                ...state,
-                busy: false
-            };
-        }
-        case "CROPS_RETRIEVAL_SUCCESS": {
+        
+        case actionTypes.FIELDS_RETRIEVAL_SUCCESS: {
+            console.log('success:', action.message);
             return {
                 ...state,
                 busy: false,
-                crops: action.payload
+                fields: action.fields
             }
         }
-        case "CROPS_RETRIEVAL_FAILED": {
+        
+        case actionTypes.CROPS_RETRIEVAL_SUCCESS: {
+            console.log('success:', action.message);
             return {
                 ...state,
-                busy: false
-            };
+                busy: false,
+                crops: action.crops
+            }
         }
-        case "FIELD_ADD_SUCCESS": {
-            let fields = state.fields.concat(action.payload);
+        
+        case actionTypes.ADD_FIELD_SUCCESS: {
+            console.log('success:', action.message);
+            let fields = state.fields.concat(action.newField);
             return {
                 ...state,
                 busy: false,
                 fields
             }
         }
-        case "FIELD_ADD_FAILED": {
-            return {
-                ...state,
-                busy: false
-            };
-        }
-        case "CROP_ADD_SUCCESS": {
-            let crops = state.crops.concat(action.payload);
+
+        case actionTypes.ADD_CROP_SUCCESS: {
+            console.log('success:', action.message);
+            let crops = state.crops.concat(action.newCrop);
             return {
                 ...state,
                 busy: false,
                 crops
             }
         }
-        case "CROP_ADD_FAILED": {
-            return {
-                ...state,
-                busy: false
-            };
-        }
-        case "FIELD_REMOVAL_SUCCESS": {
+
+        case actionTypes.DELETE_FIELD_SUCCESS: {
+            console.log('success:', action.message);
             let fields = state.fields.filter(field => {
-                return field.fieldResId!==action.payload
+                return field.fieldResId!==action.removedField
             });
             return {
                 ...state,
@@ -108,15 +167,11 @@ export const reducer = (state, action) => {
                 fields
             }
         }
-        case "FIELD_REMOVAL_FAILED": {
-            return {
-                ...state,
-                busy: false
-            };
-        }
-        case "CROP_REMOVAL_SUCCESS": {
+
+        case actionTypes.DELETE_CROP_SUCCESS: {
+            console.log('success:', action.message);
             let crops = state.crops.filter(crop => {
-                return crop.cropId!==action.payload
+                return crop.cropId!==action.removedCrop
             });
             return {
                 ...state,
@@ -124,26 +179,33 @@ export const reducer = (state, action) => {
                 crops
             }
         }
-        case "CROP_REMOVAL_FAILED": {
+
+        case actionTypes.SATELLITE_INSIGHTS_RETRIEVAL_SUCCESS: {
+            console.log('success:', action.message);
             return {
                 ...state,
-                busy: false
-            };
-        }
-        case "FIELD_DETAILS_RETRIEVAL_SUCCESS": {
-            return {
-                ...state,
-                fieldData: action.payload,
-                busy: false
+                busy: false,
+                satelliteInsights: action.satelliteInsights
             }
         }
-        case "FIELD_DETAILS_RETRIEVAL_FAILED": {
+
+        case actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_SUCCESS: {
+            console.log('success:', action.message);
             return {
                 ...state,
-                busy: false
+                busy: false,
+                agriBotInsights: action.agriBotInsights
             }
         }
-        default:
-            return state;
+
+        default: {
+            console.log('invalid action type')
+            return {
+                ...state
+            }
+        }
     }
+
 }
+
+export default reducer;

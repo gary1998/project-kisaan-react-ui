@@ -32,7 +32,7 @@ class FieldSelector extends React.Component{
                     <Button disabled kind="ghost" size="field">{this.state.datetime}</Button>
                 </Column>
                 <Column>
-                    <Select value={this.props.selectedField} onChange={this.props.onFieldChange} width={'xl'} id="agriBotDashboardfieldSelector" inline labelText="Select one field to get cards on dashboard">
+                    <Select value={this.props.selectedField} onChange={this.props.onFieldChange} width={'xl'} id="agriBotDashboardfieldSelector" inline>
                         {
                             this.props.fields?this.props.fields.map(field => {
                                 let seperator = field.fieldResId.lastIndexOf(":");
