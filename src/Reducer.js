@@ -100,6 +100,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 satelliteBusy: false,
+                agriBotBusy: false,
                 busy: false
             }
         }
@@ -140,7 +141,6 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
-                satelliteBusy: false,
                 fields: action.fields
             }
         }

@@ -4,21 +4,37 @@ const plantDocURL = "https://plant-doc-plantcv.herokuapp.com/analyze";
 
 function* agriBotInsightsRetrievalAsync(data) {
     try {
+        const agriBotInsights = {}
+        agriBotInsights.envData = {
+            "temp": 23.7,
+            "humidity": 52,
+            "pressure": 23
+        }
+
+        agriBotInsights.soilData = {
+            "moisture": 0.75,
+            "temp": 25.3,
+            "fertility": {
+                "n": "medium",
+                "p": "low",
+                "k": "high"
+            }
+        }
         const fieldId = data.input.fieldResId.substring(data.input.fieldResId.lastIndexOf(":")+1)
-        const imgURL = "https://cdn.britannica.com/89/126689-004-D622CD2F/Potato-leaf-blight.jpg";
-        console.log(`agriBot data for ${fieldId}`);
+        const imgURL = data.input.img;
         const plantDocResponse = yield fetch(`${plantDocURL}?raw=true&url=${imgURL}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(data => {
-            return data.ok?data:undefined
+            return data.ok?data.json():undefined
         })
+        agriBotInsights.plantDocData = plantDocResponse;
 
-        if(plantDocResponse){
+        if(agriBotInsights){
             yield put({
-                type: actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_SUCCESS, message: 'agribot insights received', agriBotInsights: plantDocResponse
+                type: actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_SUCCESS, message: 'agribot insights received', agriBotInsights: agriBotInsights
             })
         } else {
             yield put({
