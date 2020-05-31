@@ -16,7 +16,7 @@ class App extends React.Component {
   render(){
     return (
       <>
-        <Loading active={this.props.busy===true} description={"Working on it, please wait..."} withOverlay={true} small={false} />
+        <Loading active={this.props.busy===true || this.props.satelliteBusy===true || this.props.agriBotBusy===true} description={"Working on it, please wait..."} withOverlay={true} small={false} />
         <AppLayout >
           <HashRouter>
             <Content>
@@ -37,7 +37,9 @@ class App extends React.Component {
 
 function mapStateToProps(state){
   return {
-    busy: state.busy
+    busy: state.busy,
+    satelliteBusy: state.satelliteBusy,
+    agriBotBusy: state.agriBotBusy
   }
 }
 

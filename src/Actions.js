@@ -51,6 +51,11 @@ export const getSatelliteInsights = (input) => ({
     input
 })
 
+export const getAgriBotInsights = (input) => ({
+    type: actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_REQUEST,
+    input
+})
+
 // const catchError = (err) => {
 //     console.log('error occurred while retrieving field data from agro', err);
 //     return {

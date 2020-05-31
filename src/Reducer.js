@@ -7,6 +7,7 @@ const reducer = (state, action) => {
         case actionTypes.LOGIN_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -14,6 +15,7 @@ const reducer = (state, action) => {
         case actionTypes.LOGOUT_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -21,6 +23,7 @@ const reducer = (state, action) => {
         case actionTypes.GEOLOCATION_RETRIEVAL_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -28,6 +31,7 @@ const reducer = (state, action) => {
         case actionTypes.FIELDS_RETRIEVAL_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -35,6 +39,7 @@ const reducer = (state, action) => {
         case actionTypes.CROPS_RETRIEVAL_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -42,6 +47,7 @@ const reducer = (state, action) => {
         case actionTypes.ADD_FIELD_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -49,6 +55,7 @@ const reducer = (state, action) => {
         case actionTypes.ADD_CROP_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -56,6 +63,7 @@ const reducer = (state, action) => {
         case actionTypes.DELETE_FIELD_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -63,6 +71,7 @@ const reducer = (state, action) => {
         case actionTypes.DELETE_CROP_REQUEST: {
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: true
             }
         }
@@ -70,14 +79,18 @@ const reducer = (state, action) => {
         case actionTypes.SATELLITE_INSIGHTS_RETRIEVAL_REQUEST: {
             return {
                 ...state,
-                busy: true
+                busy: true,
+                agriBotBusy: false,
+                satelliteBusy: true
             }
         }
 
         case actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_REQUEST: {
             return {
                 ...state,
-                busy: true
+                busy: true,
+                satelliteBusy: false,
+                agriBotBusy: true
             }
         }
 
@@ -86,6 +99,7 @@ const reducer = (state, action) => {
             console.log('error occurred:', action.error);
             return {
                 ...state,
+                satelliteBusy: false,
                 busy: false
             }
         }
@@ -96,6 +110,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 user: action.user
             }
         }
@@ -105,6 +120,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 user: undefined
             }
         }
@@ -114,6 +130,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 geolocation: action.geolocation
             }
         }
@@ -123,6 +140,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 fields: action.fields
             }
         }
@@ -132,6 +150,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 crops: action.crops
             }
         }
@@ -142,6 +161,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 fields
             }
         }
@@ -152,6 +172,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 crops
             }
         }
@@ -164,6 +185,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 fields
             }
         }
@@ -176,6 +198,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
                 crops
             }
         }
@@ -185,6 +208,8 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                satelliteBusy: false,
+                agriBotBusy: false,
                 satelliteInsights: action.satelliteInsights
             }
         }
@@ -194,6 +219,8 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 busy: false,
+                agriBotBusy: false,
+                satelliteBusy: false,
                 agriBotInsights: action.agriBotInsights
             }
         }

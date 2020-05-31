@@ -11,6 +11,7 @@ import * as cropsAdditionSaga from './cropAdditionSaga';
 import * as cropDeletionSaga from './cropDeletionSaga';
 
 import * as satelliteInsightsRetrievalSaga from './satelliteInsightsRetrievalSaga';
+import * as agriBotInsightsRetrievalSaga from './agriBotInsightsRetrievalSaga';
 
 import { all, fork } from 'redux-saga/effects';
 
@@ -25,6 +26,7 @@ export default function* rootSaga() {
         ...Object.values(cropsRetrievalSaga),
         ...Object.values(cropsAdditionSaga),
         ...Object.values(cropDeletionSaga),
-        ...Object.values(satelliteInsightsRetrievalSaga)
+        ...Object.values(satelliteInsightsRetrievalSaga),
+        ...Object.values(agriBotInsightsRetrievalSaga)
     ].map(fork))
 }
