@@ -134,7 +134,7 @@ class Configure extends React.Component {
                             <br />
                             <Row>
                                 <Column sm={4} lg={6} style={{ textAlign: 'center' }}>
-                                    <Map center={this.props.geolocation ? this.props.geolocation : [21, 73]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['wikimedia']} />
+                                    <Map center={this.props.geolocation ? this.props.geolocation : [21, 73]} animate={true} zoom={12} height={300} onBoundsChanged={this._handleMapBoundChange} provider={this.provider['osm']} />
                                     <div className="bx--form__helper-text" style={{ maxWidth: '100%' }}>
                                         Zoom to your fields (1 Ha to 3000 Ha) and click on button below.
                                         </div>

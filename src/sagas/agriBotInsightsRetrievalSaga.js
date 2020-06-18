@@ -20,7 +20,7 @@ function* agriBotInsightsRetrievalAsync(data) {
                 "k": "high"
             }
         }
-        const fieldId = data.input.fieldResId.substring(data.input.fieldResId.lastIndexOf(":")+1)
+        //const fieldId = data.input.fieldResId.substring(data.input.fieldResId.lastIndexOf(":") + 1)
         const imgURL = data.input.img;
         const plantDocResponse = yield fetch(`${plantDocURL}?raw=true&url=${imgURL}`, {
             method: 'GET',
@@ -28,11 +28,11 @@ function* agriBotInsightsRetrievalAsync(data) {
                 'Content-Type': 'application/json'
             }
         }).then(data => {
-            return data.ok?data.json():undefined
+            return data.ok ? data.json() : undefined
         })
         agriBotInsights.plantDocData = plantDocResponse;
 
-        if(agriBotInsights){
+        if (agriBotInsights) {
             yield put({
                 type: actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_SUCCESS, message: 'agribot insights received', agriBotInsights: agriBotInsights
             })
@@ -40,7 +40,7 @@ function* agriBotInsightsRetrievalAsync(data) {
             yield put({
                 type: actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_FAILURE, error: 'agribot insights not received'
             })
-        }    
+        }
 
     } catch (err) {
         yield put({
