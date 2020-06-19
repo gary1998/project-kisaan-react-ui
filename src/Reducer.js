@@ -95,13 +95,110 @@ const reducer = (state, action) => {
         }
 
         // Failure Actions
-        case (actionTypes.LOGIN_FAILURE || actionTypes.LOGOUT_FAILURE || actionTypes.GEOLOCATION_RETRIEVAL_FAILURE || actionTypes.FIELDS_RETRIEVAL_FAILURE || actionTypes.CROPS_RETRIEVAL_FAILURE || actionTypes.ADD_FIELD_FAILURE || actionTypes.DELETE_FIELD_FAILURE || actionTypes.ADD_CROP_FAILURE || actionTypes.DELETE_CROP_FAILURE || actionTypes.SATELLITE_INSIGHTS_RETRIEVAL_FAILURE || actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_FAILURE): {
-            console.log('error occurred:', action.error);
+        case actionTypes.LOGIN_FAILURE: {
+            console.log('success:', action.message);
             return {
                 ...state,
+                busy: false,
+                satelliteBusy: false,
+                user: undefined
+            }
+        }
+
+        case actionTypes.LOGOUT_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                satelliteBusy: false,
+                user: undefined
+            }
+        }
+
+        case actionTypes.GEOLOCATION_RETRIEVAL_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                satelliteBusy: false,
+                geolocation: undefined
+            }
+        }
+        
+        case actionTypes.FIELDS_RETRIEVAL_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                fields: undefined
+            }
+        }
+        
+        case actionTypes.CROPS_RETRIEVAL_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                satelliteBusy: false,
+                crops: undefined
+            }
+        }
+        
+        case actionTypes.ADD_FIELD_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                satelliteBusy: false
+            }
+        }
+
+        case actionTypes.ADD_CROP_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                satelliteBusy: false
+            }
+        }
+
+        case actionTypes.DELETE_FIELD_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                satelliteBusy: false
+            }
+        }
+
+        case actionTypes.DELETE_CROP_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                satelliteBusy: false
+            }
+        }
+
+        case actionTypes.SATELLITE_INSIGHTS_RETRIEVAL_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
                 satelliteBusy: false,
                 agriBotBusy: false,
-                busy: false
+                satelliteInsights: undefined
+            }
+        }
+
+        case actionTypes.AGRIBOT_INSIGHTS_RETRIEVAL_FAILURE: {
+            console.log('success:', action.message);
+            return {
+                ...state,
+                busy: false,
+                agriBotBusy: false,
+                satelliteBusy: false,
+                agriBotInsights: undefined
             }
         }
 

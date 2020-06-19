@@ -99,7 +99,7 @@ class SatelliteInsightsDashboard extends React.Component {
                                 {this.props.satelliteInsights.satelliteImageryData ?
                                     <Card heading="Crop Health" icon={<WatsonHealthDna32 />} subtitle={`${new Date(this.props.satelliteInsights.satelliteImageryData[this.props.satelliteInsights.satelliteImageryData.length - 1].dt * 1000).toLocaleString()} by ${this.props.satelliteInsights.satelliteImageryData[this.props.satelliteInsights.satelliteImageryData.length - 1].type}`}>
                                         <div className="card-body">
-                                            <img width="100%" src={this.props.satelliteInsights.satelliteImageryData[this.props.satelliteInsights.satelliteImageryData.length - 1].image.ndvi} alt="satellite imagery" />
+                                            <img width="100%" src={`${this.props.satelliteInsights.satelliteImageryData[this.props.satelliteInsights.satelliteImageryData.length-1].image.ndvi.replace("http://", "https://")}`} alt="satellite imagery" />
                                         </div>
                                         <div className="card-body">
                                             <strong className="card-body-head">Valid Data</strong>
