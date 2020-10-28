@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/project-kisaan-react-ui/static/css/main.3ce5961a.chunk.css",
-    "main.js": "/project-kisaan-react-ui/static/js/main.ec8b090d.chunk.js",
-    "main.js.map": "/project-kisaan-react-ui/static/js/main.ec8b090d.chunk.js.map",
+    "main.js": "/project-kisaan-react-ui/static/js/main.f0b58d21.chunk.js",
+    "main.js.map": "/project-kisaan-react-ui/static/js/main.f0b58d21.chunk.js.map",
     "runtime-main.js": "/project-kisaan-react-ui/static/js/runtime-main.1bdde233.js",
     "runtime-main.js.map": "/project-kisaan-react-ui/static/js/runtime-main.1bdde233.js.map",
     "static/css/2.28980e19.chunk.css": "/project-kisaan-react-ui/static/css/2.28980e19.chunk.css",
     "static/js/2.5d50725f.chunk.js": "/project-kisaan-react-ui/static/js/2.5d50725f.chunk.js",
     "static/js/2.5d50725f.chunk.js.map": "/project-kisaan-react-ui/static/js/2.5d50725f.chunk.js.map",
     "index.html": "/project-kisaan-react-ui/index.html",
-    "precache-manifest.c266bbb4fd81a02a996435f6484b7e19.js": "/project-kisaan-react-ui/precache-manifest.c266bbb4fd81a02a996435f6484b7e19.js",
+    "precache-manifest.e6d35376f9e2348d0846e3fa2d752604.js": "/project-kisaan-react-ui/precache-manifest.e6d35376f9e2348d0846e3fa2d752604.js",
     "service-worker.js": "/project-kisaan-react-ui/service-worker.js",
     "static/css/2.28980e19.chunk.css.map": "/project-kisaan-react-ui/static/css/2.28980e19.chunk.css.map",
     "static/css/main.3ce5961a.chunk.css.map": "/project-kisaan-react-ui/static/css/main.3ce5961a.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.28980e19.chunk.css",
     "static/js/2.5d50725f.chunk.js",
     "static/css/main.3ce5961a.chunk.css",
-    "static/js/main.ec8b090d.chunk.js"
+    "static/js/main.f0b58d21.chunk.js"
   ]
 }
