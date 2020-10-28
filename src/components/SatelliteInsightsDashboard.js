@@ -26,12 +26,82 @@ class SatelliteInsightsDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.props.getSatelliteInsights(this.state.selectedField);
+        this._sendAlertsToTelegram();
     }
 
     _onFieldChange = async (e) => {
         this.setState({ selectedField: e.target.value }, async () => {
             await this.props.getSatelliteInsights(this.state.selectedField);
         });
+    }
+
+    _sendMessageToTelegram = (textMsg) => {
+        fetch('https://api.telegram.org/bot1267879078:AAFMH_eSpST_FlHI-2pKLmIj3Mn03W16lbI/sendMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: 1008351134,
+                text: textMsg,
+                parse_mode: "html"
+            })
+        }).then(resp => {
+            console.log(resp.json());
+        })
+    }
+
+    _sendAlertsToTelegram = () => {
+        if((this.props.satelliteInsights.weatherData.main.temp >= 30) || ((this.props.satelliteInsights.soilData.t0 - 273.15).toPrecision(4) >= 32) || ((this.props.satelliteInsights.soilData.t10 - 273.15).toPrecision(4) >= 32)){
+            this._sendMessageToTelegram('<b><i><u>High Temperature! Not suitable for sowing seeds.</u></i></b>')
+        }
+        if((this.props.satelliteInsights.weatherData.main.temp <= 20) || ((this.props.satelliteInsights.soilData.t0 - 273.15).toPrecision(4) <= 21) || ((this.props.satelliteInsights.soilData.t10 - 273.15).toPrecision(4) <= 21)){
+            this._sendMessageToTelegram('<b><i><u>Low Temperature! Not suitable for sowing seeds.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.main.temp_max >= 32){
+            this._sendMessageToTelegram('<b><i><u>High Temperature! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.main.temp_min <= 21){
+            this._sendMessageToTelegram('<b><i><u>Low Temperature! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.main.pressure >= 1200){
+            this._sendMessageToTelegram('<b><i><u>High Barometric Pressure! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.main.pressure <= 500){
+            this._sendMessageToTelegram('<b><i><u>Low Barometric Pressure! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.main.humidity >= 70){
+            this._sendMessageToTelegram('<b><i><u>High Humidity! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.main.humidity <= 50){
+            this._sendMessageToTelegram('<b><i><u>Low Humidity! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.wind.speed >= 0.5){
+            this._sendMessageToTelegram('<b><i><u>High Wind Speed! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.wind.speed <= 0.1){
+            this._sendMessageToTelegram('<b><i><u>Low Wind Speed! Not suitable for crops.</u></i></b>')
+        }
+        if((this.props.satelliteInsights.ndviStatsData.mean.toPrecision(2) >= 0.5) && (this.props.satelliteInsights.eviStatsData.mean.toPrecision(2) >= 0.5)){
+            this._sendMessageToTelegram('<b><i><u>Your crops look healthy!</u></i></b>')
+        } else {
+            this._sendMessageToTelegram('<b><i><u>Your crops look unhealthy!</u></i></b>')
+        }
+        if(this.props.satelliteInsights.soilData.moisture >= 75){
+            this._sendMessageToTelegram('<b><i><u>High Moisture! Stop irrigating the soil.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.soilData.moisture <= 25){
+            this._sendMessageToTelegram('<b><i><u>Low Moisture! Irrigate the soil.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.uviData.uvi <= 0.5) {
+            this._sendMessageToTelegram('<b><i><u>Low UV Index! Not suitable for crops.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.weather[0].icon === "04d" || this.props.satelliteInsights.weatherData.weather[0].icon === "04n"){
+            this._sendMessageToTelegram('<b><i><u>Light Rain Alert! It may rain today, no need to irrigate.</u></i></b>')
+        }
+        if(this.props.satelliteInsights.weatherData.weather[0].icon === "09d" || this.props.satelliteInsights.weatherData.weather[0].icon === "09n"){
+            this._sendMessageToTelegram('<b><i><u>Strong Rain Alert! It may rain today, no need to irrigate.</u></i></b>')
+        }
     }
 
     _onForecastWeatherSliderChange = (e) => {
