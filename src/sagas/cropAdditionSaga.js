@@ -1,18 +1,18 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import * as actionTypes from '../constants';
-const serverURL = "https://project-kisaan-graphql-server.herokuapp.com/graphql";
+const serverURL = "https://agribot-7dadf.firebaseio.com/users";
 
 function* cropAdditionAsync(data) {
     try {
-        let query = `mutation addCrop($owner: String, $cropId: String, $cropResId: String, $name: String){createCrop(owner: $owner, cropId: $cropId, name: $name, cropResId: $cropResId){cropResId cropId}}`;
+        let url = `${serverURL}/${data.input.owner}/crops`;
         let cropResId = `${data.input.owner}:crops:${data.input.cropId}`;
         let variables = { cropId: data.input.cropId, name: data.input.name, owner: data.input.owner, cropResId };
-        let resp = yield fetch(serverURL, {
+        let resp = yield fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ query, variables })
+            body: JSON.stringify(variables)
         }).then(data => {
             return data.json();
         });

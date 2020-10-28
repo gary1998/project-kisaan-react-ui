@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas/index';
-import reducer from './reducer';
+import reducer from './Reducer';
 import { loadState } from './localStorage';
 
 const sagaMiddleware = createSagaMiddleware()
