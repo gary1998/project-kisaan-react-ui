@@ -13,7 +13,7 @@ import SatelliteInsightsDashboard from '../components/SatelliteInsightsDashboard
 class Dashboard extends React.Component {
     state = {
         selectedField: '',
-        selectedTab: 0
+        selectedTab: 1
     }
 
     constructor(props) {
