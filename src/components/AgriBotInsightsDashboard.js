@@ -6,7 +6,7 @@ import {
     Content,
     Button
 } from 'carbon-components-react';
-import { Renew20, IotConnect20 } from '@carbon/icons-react';
+import { Renew20, IotConnect20, Printer20 } from '@carbon/icons-react';
 import Card from './Card';
 import { getAgriBotInsights } from '../Actions';
 
@@ -51,15 +51,17 @@ class AgriBotInsightsDashboard extends React.Component {
     render() {
         return (
             <>
+                <br />
                 {this.props.agriBotInsights ?
                     <Content style={{ backgroundColor: '#f4f4f4' }}>
                         <Row>
                             <Column style={{textAlign: 'center'}}>
-                                <Button onClick={() => window.location.reload()} renderIcon={Renew20}>Refresh</Button>
+                                <Button onClick={() => window.location.reload()} renderIcon={Renew20}>Refresh</Button>&nbsp;&nbsp;
+                                <Button onClick={() => window.print()} renderIcon={Printer20}>Print</Button>
                             </Column>
                         </Row>
                         <br />
-                        <Row>
+                        <Row id="printableArea">
                             <Column>
                                 {this.props.agriBotInsights.deviceResponse['arduino-uno'] && this.props.agriBotInsights.deviceResponse.bmp280 && this.props.agriBotInsights.deviceResponse.dht11 ?
                                     <Card heading="AgriBot Data" icon={<IotConnect20 />} subtitle={new Date(this.props.agriBotInsights.deviceResponse.timestamp).toLocaleString()}>
