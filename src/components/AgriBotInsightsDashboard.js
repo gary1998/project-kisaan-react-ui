@@ -52,7 +52,7 @@ class AgriBotInsightsDashboard extends React.Component {
         return (
             <>
                 <br />
-                {this.props.agriBotInsights ?
+                {this.props.agriBotInsights.deviceResponse ?
                     <Content style={{ backgroundColor: '#f4f4f4' }}>
                         <Row>
                             <Column style={{textAlign: 'center'}}>
@@ -237,7 +237,6 @@ class AgriBotInsightsDashboard extends React.Component {
 const mapStateToProps = (state) => {
     return {
         fields: state.fields,
-        busy: state.busy,
         agriBotInsights: state.agriBotInsights
     }
 }
